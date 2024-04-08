@@ -38,11 +38,7 @@
             <p class="lead">Dibuat untuk memenuhi Technical Test PT. Pilarmedia Indonesia</p>
             <hr class="my-4">
             <p>Silahkan Mulai Absensi,
-              @if ($employee->sex == 'Male')
-                Bapak {{ $employee->first_name.' '.$employee->last_name }}
-              @else
-                Ibu {{ $employee->first_name.' '.$employee->last_name }}
-              @endif
+              {{ $employee->name }}
             </p>
           </div>
         </div>
