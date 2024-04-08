@@ -77,7 +77,7 @@
                                     <th>Riwayat Absensi</th>
                                     <th class="none">Riwayat Akhir Absensi</th>
                                     <th>Lokasi</th>
-                                    <th>Jabatan</th>
+                                    <th>Divisi</th>
                                     <th class="none">Aksi</th>
                                 </tr>
                             </thead>
@@ -85,7 +85,7 @@
                                 @foreach ($employees as $index => $employee)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $employee->first_name.' '.$employee->last_name }}</td>
+                                    <td>{{ $employee->name }}</td>
                                     @if($employee->attendanceToday)
                                         <td><h6 class="text-center"><span class="badge badge-pill badge-success">Terekam</span></h6></td>
                                         <td>
@@ -96,7 +96,7 @@
                                         <?php } elseif ($employee->attendanceToday->time>9 && $employee->attendanceToday->time<=17) {
                                             ?><td><h6 class="text-center"><span class="badge badge-pill badge-warning">Hadir Terlambat</span></h6></td><?php
                                         } else {
-                                           ?><td><h6 class="text-center"><span class="badge badge-pill badge-danger">Absensi Tidak Valid</span></h6></td><?php 
+                                            ?><td><h6 class="text-center"><span class="badge badge-pill badge-danger">Absensi Tidak Valid</span></h6></td><?php 
                                         } ?>
                                             <td>
                                                 Terekam sejak {{ $employee->attendanceToday->updated_at->format('H:i:s') }} dari {{ $employee->attendanceToday->exit_location}} dengan alamat IP {{ $employee->attendanceToday->exit_ip}}
@@ -115,7 +115,7 @@
                                     if(!empty($loc['entry_location'])) { 
                                         echo $loc['entry_location']; 
                                     } else { echo " - ";} }?></td>
-                                    <td>{{ $employee->desg }}</td>
+                                    <td>{{ $employee->division }}</td>
                                     <td>
                                         @if($employee->attendanceToday)
                                         <button 

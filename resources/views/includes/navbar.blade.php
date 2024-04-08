@@ -35,14 +35,15 @@
                 <p>
                     {{ Auth::user()->name }}
                     @if ( Auth::user()->employee )
-                    - {{ Auth::user()->employee->desg }}, {{ Auth::user()->employee->department->name }}
+                    - {{ Auth::user()->employee->division }}, {{ Auth::user()->employee->campus_origin }}
                     @endif 
                 </p>
                 </li>
                 <!-- Menu Body -->
                 <li class="user-body text-center">
                     @if ( Auth::user()->employee )
-                    <small>Member since {{ Auth::user()->employee->join_date->format('d M, Y') }}</small>
+                    <small>Berakhir pada {{ \Carbon\Carbon::parse(Auth::user()->employee->intern_period)->format('d F Y') }}
+                    </small>
                     @endif 
                 <!-- /.row -->
                 </li>

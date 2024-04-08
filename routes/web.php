@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,8 +34,10 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth','
     // Routes for employees //
     Route::get('/employees/list-employees', 'EmployeeController@index')->name('employees.index');
     Route::get('/employees/add-employee', 'EmployeeController@create')->name('employees.create');
+    // Route::put('/employees/{id}', 'EmployeeController@update')->name('employees.update');
+    Route::put('/employees/update-employee', 'EmployeeController@update')->name('employees.update');
     Route::post('/employees', 'EmployeeController@store')->name('employees.store');
-    Route::get('/employees/attendance', 'EmployeeController@attendance')->name('employees.attendance');
+    Route::get('/employees/attendance', 'EmployeeController@attendance')->name('employees.attendance.index');
     Route::post('/employees/attendance', 'EmployeeController@attendance')->name('employees.attendance');
     Route::delete('/employees/attendance/{attendance_id}', 'EmployeeController@attendanceDelete')->name('employees.attendance.delete');
     Route::get('/employees/profile/{employee_id}', 'EmployeeController@employeeProfile')->name('employees.profile');
@@ -68,7 +71,7 @@ Route::namespace('Employee')->prefix('employee')->name('employee.')->middleware(
     Route::put('/profile/{employee_id}', 'EmployeeController@profile_update')->name('profile-update');
     // Routes for Attendances //
     Route::get('/attendance/list-attendances', 'AttendanceController@index')->name('attendance.index');
-    Route::post('/attendance/list-attendances', 'AttendanceController@index')->name('attendance.index');
+    Route::post('/attendance/list-attendances', 'AttendanceController@index')->name('attendance');
     Route::post('/attendance/get-location', 'AttendanceController@location')->name('attendance.get-location');
     Route::get('/attendance/register', 'AttendanceController@create')->name('attendance.create');
     Route::post('/attendance/{employee_id}', 'AttendanceController@store')->name('attendance.store');

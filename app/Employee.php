@@ -2,21 +2,20 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
-    protected $dates = ['created_at', 'dob','updated_at', 'join_date'];
-    protected $fillable = ['user_id', 'first_name', 'last_name', 'sex', 'dob', 'join_date', 'desg', 'department_id', 'salary', 'photo'];
+    use HasFactory;
+    protected $table = 'employees';
+    protected $primaryKey = 'id';
+    protected $dates = ['created_at', 'updated_at', 'intern_period'];
+    protected $fillable = ['user_id', 'name', 'age', 'campus_origin', 'division', 'intern_period', 'photo'];
     public function user() {
         return $this->belongsTo('App\User');
     }
-
-    public function department() {
-        // return $this->hasOne('App\Department');
-        return $this->belongsTo('App\Department');
-    }
-
+    
     public function attendance() {
         return $this->hasMany('App\Attendance');
     }

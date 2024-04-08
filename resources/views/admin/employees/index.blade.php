@@ -32,25 +32,22 @@
     <div class="container-fluid">
         @include('messages.alerts')
         <div class="row">
-            <div class="col-lg-8 mx-auto">
+            <div class="col-lg-12 mx-auto">
                 <div class="card card-primary">
-                    <div class="card-header">
-                        <div class="card-title text-center">
-                            Karyawan
-                        </div>
-                        
-                    </div>
                     <div class="card-body">
-                        @if ($employees->count())
+                        <div class="col-md-12 text-right mb-3">
+                            <a href="" data-toggle="modal" data-target=".TambahData" class="btn btn-info" title="Tambah Karyawan">
+                            <i class="fa fa-plus"></i> Tambah</a>
+                        </div>
                         <table class="table table-bordered table-hover" id="dataTable">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Nama</th>
-                                    <th>Department</th>
-                                    <th>Jabatan</th>
-                                    <th>Tanggal Bergabung</th>
-                                    <th>Gaji</th>
+                                    <th>Umur</th>
+                                    <th>Asal Kampus</th>
+                                    <th>Divisi</th>
+                                    <th>Periode Magang</th>
                                     <th class="none">Aksi</th>
                                 </tr>
                             </thead>
@@ -58,13 +55,14 @@
                                 @foreach ($employees as $index => $employee)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $employee->first_name.' '.$employee->last_name }}</td>
-                                    <td>{{ $employee->department->name }}</td>
-                                    <td>{{ $employee->desg }}</td>
-                                    <td>{{ $employee->join_date->format('d M, Y') }}</td>
-                                    <td>{{ $employee->salary }}</td>
+                                    <td>{{ $employee->name }}</td>
+                                    <td>{{ $employee->age }}</td>
+                                    <td>{{ $employee->campus_origin }}</td>
+                                    <td>{{ $employee->division }}</td>
+                                    <td>{{ $employee->intern_period->format('d M, Y') }}</td>
                                     <td>
                                         <a href="{{ route('admin.employees.profile', $employee->id) }}" class="btn btn-flat btn-info">Lihat Profil</a>
+                                        <a href="" class="btn btn-warning" data-toggle="modal" data-target=".editEmployee{{ $employee->id }}" title="Edit Employee">Edit Data</a>
                                         <button 
                                         class="btn btn-flat btn-danger"
                                         data-toggle="modal" 
@@ -105,13 +103,7 @@
                                     </div>
                                 </div>
                                 <!-- /.modal -->
-                            @endfor
-                        @else
-                        <div class="alert alert-info text-center" style="width:50%; margin: 0 auto">
-                            <h4>Tidak Ada Data</h4>
-                        </div>
-                        @endif
-                        
+                            @endfor 
                     </div>
                 </div>
                 <!-- general form elements -->
@@ -121,11 +113,193 @@
     </div>
     <!-- /.container-fluid -->
 </section>
-    <!-- /.content -->
 
+<div class="modal fade TambahData" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Karyawan</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <form action="{{ route('admin.employees.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('POST')
+                <div class="form-group mb-3">
+                    <label class="required-label faded-label" for="name" >Nama</label>
+                    <span><i class="fa fa-question-circle" tabindex="0" data-toggle="popover" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-title="Nama Lengkap"></i></span>
+                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" placeholder="Masukan name">
+                    @error('name')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+                <div class="form-group mb-3">
+                    <label class="required-label faded-label" for="age" >Umur</label>
+                    <input type="number" name="age" class="form-control @error('age') is-invalid @enderror" value="{{ old('age') }}" placeholder="Masukan Umur">
+                    @error('age')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+                <div class="form-group mb-3">
+                    <label class="required-label faded-label" for="email" >Email</label>
+                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="Masukan Email">
+                    @error('email')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+                <div class="form-group mb-3">
+                    <label class="required-label faded-label" for="intern_period" >Periode Magang</label>
+                    <input type="text" name="intern_period" id="intern_period" class="form-control @error('intern_period') is-invalid @enderror" value="{{ old('intern_period') }}" placeholder="Masukan akhir magang">
+                    @error('intern_period')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+                <div class="form-group mb-3">
+                    <label class="required-label faded-label" for="division" >Divisi Magang</label>
+                    <input type="text" name="division" class="form-control @error('division') is-invalid @enderror" value="{{ old('campus_origin') }}" placeholder="Masukan Divisi">
+                    @error('division')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+                <div class="form-group mb-3">
+                    <label class="required-label faded-label" for="campus_origin" >Asal Kampus</label>
+                    <input type="text" name="campus_origin" class="form-control @error('campus_origin') is-invalid @enderror" value="{{ old('campus_origin') }}" placeholder="Masukan Asal Kampus">
+                    @error('campus_origin')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+                <div class="form-group mb-3">
+                    <label class="required-label faded-label" for="password" >Password Baru</label>
+                    <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" value="{{ old('password') }}" placeholder="Masukan baru">
+                    @error('password')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+                <div class="form-group mb-3">
+                    <label class="required-label faded-label" for="password_confirmation" >Konfirmasi Password</label>
+                    <input type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" value="{{ old('password_confirmation') }}" placeholder="Masukan Asal Kampus">
+                    @error('password_confirmation')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Tambah</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@foreach ($employees as $employee)
+<div class="modal fade editEmployee{{ $employee->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Karyawan</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <!-- Isi modal body -->
+            <div class="modal-body">
+                <!-- Form edit/update -->
+                <form action="{{ route('admin.employees.update', ['id' => $employee->id]) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT') <!-- Menggunakan method PUT untuk update -->
+
+                    <!-- Input field untuk Nama -->
+                    <div class="form-group mb-3">
+                        <label class="required-label faded-label" for="name">Nama</label>
+                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $employee->name }}" placeholder="Masukkan Nama">
+                        @error('name')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+                    <!-- Input field untuk Umur -->
+                    <div class="form-group mb-3">
+                        <label class="required-label faded-label" for="age">Umur</label>
+                        <input type="number" name="age" class="form-control @error('age') is-invalid @enderror" value="{{ $employee->age }}" placeholder="Masukkan Umur">
+                        @error('age')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+                    <!-- Input field untuk Email -->
+                    <div class="form-group mb-3">
+                        <label class="required-label faded-label" for="email">Email</label>
+                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ $employee->user->email }}" placeholder="Masukkan Email">
+                        @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+                    <!-- Input field untuk Periode Magang -->
+                    <div class="form-group mb-3">
+                        <label class="required-label faded-label" for="intern_period">Periode Magang</label>
+                        <input type="text" name="intern_period" id="intern_period" class="form-control @error('intern_period') is-invalid @enderror" value="{{ $employee->intern_period }}" placeholder="Masukkan Periode Magang">
+                        @error('intern_period')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+                    <!-- Input field untuk Divisi -->
+                    <div class="form-group mb-3">
+                        <label class="required-label faded-label" for="division">Divisi Magang</label>
+                        <input type="text" name="division" class="form-control @error('division') is-invalid @enderror" value="{{ $employee->division }}" placeholder="Masukkan Divisi">
+                        @error('division')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+                    <!-- Input field untuk Password (opsional) -->
+                    <div class="form-group">
+                        <label for="password">Password Baru</label>
+                        <input type="password" name="password" class="form-control" placeholder="Masukkan password baru">
+                        <small class="text-muted">Kosongkan jika tidak ingin mengubah password.</small>
+                    </div>
+
+            </div>
+            <!-- Footer modal -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
 @endsection
-@section('extra-js')
 
+@section('extra-js')
 <script>
     $(document).ready(function() {
         $('#dataTable').DataTable({
@@ -134,4 +308,51 @@
         });
     });
 </script>
+<script>
+    $().ready(function() {
+        if('{{ old('dob') }}') {
+            const dob = moment('{{ old('dob') }}', 'DD-MM-YYYY');
+            const intern_period = moment('{{ old('intern_period') }}', 'DD-MM-YYYY');
+            console.log('{{ old('dob') }}')
+            $('#dob').daterangepicker({
+                "startDate": dob,
+                "singleDatePicker": true,
+                "showDropdowns": true,
+                "locale": {
+                    "format": "DD-MM-YYYY"
+                }
+            });
+            $('#intern_period').daterangepicker({
+                "startDate": intern_period,
+                "singleDatePicker": true,
+                "showDropdowns": true,
+                "locale": {
+                    "format": "DD-MM-YYYY"
+                }
+            });
+        } else {
+            $('#dob').daterangepicker({
+                "singleDatePicker": true,
+                "showDropdowns": true,
+                "locale": {
+                    "format": "DD-MM-YYYY"
+                }
+            });
+            $('#intern_period').daterangepicker({
+                "singleDatePicker": true,
+                "showDropdowns": true,
+                "locale": {
+                    "format": "DD-MM-YYYY"
+                }
+            });
+        }
+        
+    });
+</script>
+<script>
+    // Inisialisasi popover
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+    </script>
 @endsection

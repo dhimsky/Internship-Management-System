@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManagerStatic as Image;
+use RealRashid\SweetAlert\Facades\Alert;
 
 use function Ramsey\Uuid\v1;
 
@@ -24,28 +25,35 @@ class EmployeeController extends Controller
         ];
         return view('admin.employees.index')->with($data);
     }
-    public function create() {
-        $data = [
-            'departments' => Department::all(),
-            'desgs' => ['Manajer', 'Asisten Manajer', 'Kepala Divisi', 'Staff']
-        ];
-        return view('admin.employees.create')->with($data);
-    }
+    // public function create() {
+    //     $data = [
+    //         'departments' => Department::all(),
+    //         'desgs' => ['Manajer', 'Asisten Manajer', 'Kepala Divisi', 'Staff']
+    //     ];
+    //     return view('admin.employees.create')->with($data);
+    // }
 
     public function store(Request $request) {
         $this->validate($request, [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'sex' => 'required',
-            'desg' => 'required',
-            'department_id' => 'required',
-            'salary' => 'required|numeric',
+            'name' => 'required',
+            'age' => 'required',
+            'campus_origin' => 'required',
+            'division' => 'required',
+            'intern_period' => 'required',
             'email' => 'required|email',
-            'photo' => 'image|nullable',
+            // 'photo' => 'image|nullable',
             'password' => 'required|confirmed|min:6'
+        ],[
+            'name.required' => 'Nama wajib diisi!',
+            'age.required' => 'Umur wajib diisi!',
+            'campus_origin.required' => 'Asal Kampus wajib diisi!',
+            'division.required' => 'Divisi wajib diisi!',
+            'intern_period.required' => 'Periode magang wajib diisi',
+            'email.required' => 'Email wajib diisi!',
+            'password.required' => 'Password wajib diisi!',
         ]);
         $user = User::create([
-            'name' => $request->first_name.' '.$request->last_name,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
@@ -53,41 +61,66 @@ class EmployeeController extends Controller
         $user->roles()->attach($employeeRole);
         $employeeDetails = [
             'user_id' => $user->id, 
-            'first_name' => $request->first_name, 
-            'last_name' => $request->last_name,
-            'sex' => $request->sex, 
-            'dob' => $request->dob, 
-            'join_date' => $request->join_date,
-            'desg' => $request->desg, 
-            'department_id' => $request->department_id, 
-            'salary' => $request->salary, 
-            'photo'  => 'user.png'
+            'name' => $request->name, 
+            'age' => $request->age,
+            'campus_origin' => $request->campus_origin, 
+            'division' => $request->division, 
+            'intern_period' => $request->intern_period,
+            // 'photo'  => 'user.png'
         ];
         // Photo upload
-        if ($request->hasFile('photo')) {
-            // GET FILENAME
-            $filename_ext = $request->file('photo')->getClientOriginalName();
-            // GET FILENAME WITHOUT EXTENSION
-            $filename = pathinfo($filename_ext, PATHINFO_FILENAME);
-            // GET EXTENSION
-            $ext = $request->file('photo')->getClientOriginalExtension();
-            //FILNAME TO STORE
-            $filename_store = $filename.'_'.time().'.'.$ext;
-            // UPLOAD IMAGE
-            // $path = $request->file('photo')->storeAs('public'.DIRECTORY_SEPARATOR.'employee_photos', $filename_store);
-            // add new file name
-            $image = $request->file('photo');
-            $image_resize = Image::make($image->getRealPath());              
-            $image_resize->resize(300, 300);
-            $image_resize->save(public_path(DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'employee_photos'.DIRECTORY_SEPARATOR.$filename_store));
-            $employeeDetails['photo'] = $filename_store;
-        }
+        // if ($request->hasFile('photo')) {
+        //     // GET FILENAME
+        //     $filename_ext = $request->file('photo')->getClientOriginalName();
+        //     // GET FILENAME WITHOUT EXTENSION
+        //     $filename = pathinfo($filename_ext, PATHINFO_FILENAME);
+        //     // GET EXTENSION
+        //     $ext = $request->file('photo')->getClientOriginalExtension();
+        //     //FILNAME TO STORE
+        //     $filename_store = $filename.'_'.time().'.'.$ext;
+        //     // UPLOAD IMAGE
+        //     // $path = $request->file('photo')->storeAs('public'.DIRECTORY_SEPARATOR.'employee_photos', $filename_store);
+        //     // add new file name
+        //     $image = $request->file('photo');
+        //     $image_resize = Image::make($image->getRealPath());              
+        //     $image_resize->resize(300, 300);
+        //     $image_resize->save(public_path(DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'employee_photos'.DIRECTORY_SEPARATOR.$filename_store));
+        //     $employeeDetails['photo'] = $filename_store;
+        // }
         
         Employee::create($employeeDetails);
         
-        $request->session()->flash('success', 'Karyawan berhasil ditambahkan!');
-        return back();
+        Alert::success('Success', 'Data berhasil ditambahkan!');
+        return redirect()->route('admin.employees.index');
     }
+
+    public function update(Request $request, $id)
+{
+    // Ambil data karyawan berdasarkan ID
+    $employee = Employee::findOrFail($id);
+
+    // Lakukan validasi data dari $request
+    $this->validate($request, [
+        'name' => 'required',
+        'age' => 'required|numeric',
+        'campus_origin' => 'required',
+        'division' => 'required',
+        'intern_period' => 'required',
+        'email' => 'required|email',
+    ]);
+
+    // Update data karyawan berdasarkan input dari $request
+    $employee->name = $request->name;
+    $employee->age = $request->age;
+    $employee->campus_origin = $request->campus_origin;
+    $employee->division = $request->division;
+    $employee->intern_period = $request->intern_period;
+    $employee->save();
+
+    // Tampilkan pesan sukses atau redirect ke halaman lain
+    return redirect()->route('admin.employees.index')->with('success', 'Data karyawan berhasil diperbarui.');
+}
+
 
     public function attendance(Request $request) {
         $data = [
@@ -106,14 +139,13 @@ class EmployeeController extends Controller
     }
 
     public function attendanceByDate($date) {
-        $employees = DB::table('employees')->select('id', 'first_name', 'last_name', 'desg', 'department_id')->get();
+        $employees = DB::table('employees')->select('id', 'name', 'division')->get();
         $attendances = Attendance::all()->filter(function($attendance, $key) use ($date){
             return $attendance->created_at->dayOfYear == $date->dayOfYear;
         });
         return $employees->map(function($employee, $key) use($attendances) {
             $attendance = $attendances->where('employee_id', $employee->id)->first();
             $employee->attendanceToday = $attendance;
-            $employee->department = Department::find($employee->department_id)->name;
             return $employee;
         });
     }
@@ -129,8 +161,9 @@ class EmployeeController extends Controller
         $user->roles()->detach();
         // deletes the users
         $user->delete();
-        request()->session()->flash('success', 'Karyawan berhasil dihapus!');
-        return back();
+        Alert::success('Success', 'Data berhasil di hapus!');
+        return redirect()->route('admin.employees.index');
+
     }
 
     public function attendanceDelete($attendance_id) {

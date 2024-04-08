@@ -10,27 +10,24 @@
     <ul class="nav nav-treeview">
         <li class="nav-item">
             <a
-                href="{{ route('admin.employees.create') }}"
-                class="nav-link"
-            >
+                {{-- href="{{ route('admin.employees.create') }}" --}}
+                class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Tambah Karyawan</p>
+                <p>Data Admin</p>
             </a>
         </li>
         <li class="nav-item">
             <a
                 href="{{ route('admin.employees.index') }}"
-                class="nav-link"
-            >
+                class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Daftar Karyawan</p>
+                <p>Data Karyawan</p>
             </a>
         </li>
         <li class="nav-item">
             <a
                 href="{{ route('admin.employees.attendance') }}"
-                class="nav-link"
-            >
+                class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Absensi Karyawan</p>
             </a>

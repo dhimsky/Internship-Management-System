@@ -35,9 +35,9 @@
         <div class="col-md-8 mx-auto">
             <div class="jumbotron">
             <h1 class="display-4 text-primary">Selamat Datang di Panel Admin Website Absensi</h1>
-            <p class="lead">Dibuat untuk memenuhi Technical Test PT. Pilarmedia Indonesia</p>
+            <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reprehenderit, dolores quod debitis corporis dolor molestias non commodi maiores voluptates! Possimus reiciendis eius modi architecto? Velit quas assumenda cumque vel quidem.</p>
             <hr class="my-4">
-            <p>Dibuat Dadakan 8-10 Desember 2021</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat soluta provident esse consectetur ipsa vero alias quis eius. Amet laudantium tempore quibusdam. Voluptate iusto similique sint earum ipsam doloribus dicta.</p>
             </div>
         </div>
         </row>

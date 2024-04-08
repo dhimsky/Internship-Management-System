@@ -48,37 +48,24 @@
                         </div>
                         <table class="table profile-table table-hover">
                             <tr>
-                                <td>Nama Awal</td>
-                                <td>{{ $employee->first_name }}</td>
+                                <td>Nama</td>
+                                <td>{{ $employee->name }}</td>
                             </tr>
                             <tr>
-                                <td>Nama Akhir</td>
-                                <td>{{ $employee->last_name }}</td>
+                                <td>Umur</td>
+                                <td>{{ $employee->age }}</td>
                             </tr>
                             <tr>
-                                <td>Tanggal Lahir</td>
-                                <td>{{ $employee->dob->format('d M, Y') }}</td>
+                                <td>Asal Kampus</td>
+                                <td>{{ $employee->campus_origin }}</td>
                             </tr>
                             <tr>
-                                <td>Jenis Kelamin</td>
-                                <td>{{ $employee->sex }}</td>
-                            </tr>
-                            
-                            <tr>
-                                <td>Tanggal Bergabung</td>
-                                <td>{{ $employee->join_date->format('d M, Y') }}</td>
+                                <td>Divisi</td>
+                                <td>{{ $employee->division }}</td>
                             </tr>
                             <tr>
-                                <td>Jabatan</td>
-                                <td>{{ $employee->desg }}</td>
-                            </tr>
-                            <tr>
-                                <td>Department</td>
-                                <td>{{ $employee->department->name }}</td>
-                            </tr>
-                            <tr>
-                                <td>Gaji</td>
-                                <td>₹ {{ $employee->salary }}</td>
+                                <td>Periode Magang</td>
+                                <td>{{ $employee->intern_period->format('d M, Y') }}</td>
                             </tr>
                         </table>
                     </div>

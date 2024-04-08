@@ -22,6 +22,7 @@ class CreateAttendancesTable extends Migration
             $table->string('exit_location')->nullable();
             $table->string('registered')->nullable();
             $table->string('time')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

@@ -136,6 +136,8 @@
         <script src="/plugins/daterangepicker/daterangepicker.js"></script>
         {{-- <script src="/js/daterangepicker.js"></script> --}}
         {{-- <script src="/js/moment.min.js"></script> --}}
+        @include('sweetalert::alert')
         @yield('extra-js')
     </body>
 </html>
+@stack('script-alt')
