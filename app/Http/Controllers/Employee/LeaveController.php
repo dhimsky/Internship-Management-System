@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class LeaveController extends Controller
 {
@@ -41,10 +42,10 @@ class LeaveController extends Controller
             $end = Carbon::parse($end);
             $str=date('d',strtotime($start));
         if($request->input('reason')=="Sakit" && ($cb3<=date('d', strtotime($cb)) || $cb3<=$str || $cb<date('d') || $str<date('d'))) {
-             echo'<script>alert("'.$str.' Izin Sakit hanya bisa diajukan maksimal H+3 sejak tanggal ketidakhadiran");window.location="'.$red.'";</script>';
+            echo'<script>alert("'.$str.' Izin Sakit hanya bisa diajukan maksimal H+3 sejak tanggal ketidakhadiran");window.location="'.$red.'";</script>';
         }
         else if($request->input('reason')=="Cuti" && (date('d', strtotime($cb)>=$cb4 || $str>=$cb4 || $cb>date('d') || $str>date('d')))) {
-             echo'<script>alert("Izin Cuti hanya bisa diajukan maksimal H-1 sejak tanggal ketidakhadiran");window.location="'.$red.'";</script>';
+            echo'<script>alert("Izin Cuti hanya bisa diajukan maksimal H-1 sejak tanggal ketidakhadiran");window.location="'.$red.'";</script>';
         } else {
         $data = [
             'employee' => Auth::user()->employee
@@ -76,7 +77,9 @@ class LeaveController extends Controller
             $values['start_date'] = Carbon::parse($request->input('date'));
         }
         Leave::create($values);
-        $request->session()->flash('success', 'Pengajuan Cuti Anda berhasil, tunggu persetujuan atasan.'); return redirect()->route('employee.leaves.create')->with($data); }
+
+        Alert::success('Success', 'Pengajuan Cuti Anda berhasil, tunggu persetujuan atasan.');
+        return redirect()->route('employee.leaves.create')->with($data); }
     }
 
     public function edit($leave_id) {
@@ -113,10 +116,9 @@ class LeaveController extends Controller
         } else {
             $leave->start_date = Carbon::parse($request->input('date'));
         }
-
         $leave->save();
 
-        $request->session()->flash('success', 'Update Pengajuan Cuti Anda berhasil');
+        Alert::success('Success', 'Update Pengajuan Cuti Anda berhasil');
         return redirect()->route('employee.leaves.index');
     }
 
@@ -124,8 +126,8 @@ class LeaveController extends Controller
         $leave = Leave::findOrFail($leave_id);
         Gate::authorize('employee-leaves-access', $leave);
         $leave->delete();
-        request()->session()->flash('success', 'Pengajuan Cuti Anda berhasil dihapus');
 
+        Alert::success('Success', 'Pengajuan Cuti Anda berhasil dihapus');
         return redirect()->route('employee.leaves.index');
     }
 }

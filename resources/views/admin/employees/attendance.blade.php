@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-8 mx-auto">
+            <div class="col-lg-11 mx-auto">
                 @include('messages.alerts')
                 <div class="card card-primary">
                     <div class="card-header">
@@ -63,12 +63,15 @@
                             Absensi Karyawan Hari ini
                             @endif
                         </div>
-                        
+                        <div class="col-md-12 text-right">
+                            <a href="" data-toggle="modal" data-target=".modalExport" class="btn btn-whatsapp" title="Export Data">
+                            <i class="fa fa-cloud-download"></i></a>
+                        </div>
                     </div>
                     <div class="card-body">
                         @if ($employees->count())
                         <table class="table table-bordered table-hover" id="dataTable">
-                            <thead>
+                            <thead class="text-center">
                                 <tr>
                                     <th>#</th>
                                     <th>Nama</th>
@@ -76,7 +79,7 @@
                                     <th class="none">Riwayat Awal Absensi</th>
                                     <th>Riwayat Absensi</th>
                                     <th class="none">Riwayat Akhir Absensi</th>
-                                    <th>Lokasi</th>
+                                    <th class="none">Laporan Harian</th>
                                     <th>Divisi</th>
                                     <th class="none">Aksi</th>
                                 </tr>
@@ -89,7 +92,9 @@
                                     @if($employee->attendanceToday)
                                         <td><h6 class="text-center"><span class="badge badge-pill badge-success">Terekam</span></h6></td>
                                         <td>
-                                            Terekam sejak {{ $employee->attendanceToday->created_at->format('H:i:s') }} dari {{ $employee->attendanceToday->entry_location}} dengan alamat IP {{ $employee->attendanceToday->entry_ip}}
+                                            Terekam sejak {{ $employee->attendanceToday->created_at->format('H:i:s') }} dari {{ $employee->attendanceToday->entry_location}} dengan alamat IP {{ $employee->attendanceToday->entry_ip}} <span class="badge {{ $employee->attendanceToday->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
+                                                {{ $employee->attendanceToday->entry_status }}
+                                            </span>
                                         </td>
                                         <?php if($employee->attendanceToday->time<=9 && $employee->attendanceToday->time>=7) { ?>
                                             <td><h6 class="text-center"><span class="badge badge-pill badge-success">Hadir Tepat Waktu</span></h6></td>
@@ -98,26 +103,35 @@
                                         } else {
                                             ?><td><h6 class="text-center"><span class="badge badge-pill badge-danger">Absensi Tidak Valid</span></h6></td><?php 
                                         } ?>
-                                            <td>
-                                                Terekam sejak {{ $employee->attendanceToday->updated_at->format('H:i:s') }} dari {{ $employee->attendanceToday->exit_location}} dengan alamat IP {{ $employee->attendanceToday->exit_ip}}
-                                            </td>
+                                        <td>
+                                            Terekam sejak {{ $employee->attendanceToday->updated_at->format('H:i:s') }} dari {{ $employee->attendanceToday->exit_location}} dengan alamat IP {{ $employee->attendanceToday->exit_ip}} <span class="badge {{ $employee->attendanceToday->exit_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
+                                                {{ $employee->attendanceToday->exit_status }}
+                                            </span>
+                                        </td>
+                                        <td>{{ $employee->attendanceToday->daily_report }}</td>
                                     @else
                                         <td><h6 class="text-center"><span class="badge badge-pill badge-danger">Belum Ada Riwayat</span></h6></td>
                                         <td><h6 class="text-center"><span class="badge badge-pill badge-danger">Belum Ada Riwayat</span></h6></td>
                                         <td><h6 class="text-center"><span class="badge badge-pill badge-danger">Belum Ada Riwayat</span></h6></td>
                                         <td><h6 class="text-center"><span class="badge badge-pill badge-danger">Belum Ada Riwayat</span></h6></td>
+                                        <td>-</td>
                                     @endif
-                                    <td>
+                                    <td>{{ $employee->division_id }}</td>
+
+                                    {{-- <td>
                                     <?php 
-                                    $conn = mysqli_connect("localhost","root","","absensi");
+                                    $conn = mysqli_connect("localhost","root","","ims");
                                     $loc2=mysqli_query($conn,"SELECT * FROM attendances"); 
                                     while($loc=mysqli_fetch_array($loc2)) {
                                     if(!empty($loc['entry_location'])) { 
                                         echo $loc['entry_location']; 
-                                    } else { echo " - ";} }?></td>
-                                    <td>{{ $employee->division }}</td>
+                                    } else { echo " - ";} }?></td> --}}
                                     <td>
                                         @if($employee->attendanceToday)
+                                        <button 
+                                        class="btn btn-flat btn-warning"
+                                        data-toggle="modal" data-target=".EditVal{{ $employee->attendanceToday->id }}"
+                                        >Edit Validasi</button>
                                         <button 
                                         class="btn btn-flat btn-danger"
                                         data-toggle="modal"
@@ -181,7 +195,81 @@
 </section>
     <!-- /.content -->
 
+    <div class="modal fade modalExport" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Export Data</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                    </button>
+                </div>
+            <div class="modal-body">
+                <form action="{{ route('admin.attendance.download') }}" method="GET">
+                    <div class="card-body">
+                        <div class="input-group mx-auto" style="width:100%">
+                            <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                            <input type="date" name="date" id="date" class="form-control text-center" >
+                            <small class="text-muted text-center">Kosongkan jika ingin mendownload semua data.</small>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-flat btn-primary" type="submit">Export</button>
+                    </div>
+                </form>            
+            </div>
+        </div>
+    </div>
 @endsection
+
+@foreach ($employees as $employee)
+<div class="modal fade EditVal{{ optional($employee->attendanceToday)->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Validasi</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if ($employee->attendanceToday)
+                <form action="{{ route('admin.employees.attendance.updateval',  ['id' => $employee->attendanceToday->id]) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group mb-3">
+                        <label class="required-label faded-label" for="entry_status">Kevalidasian IP/Lokasi Masuk</label>
+                        <select name="entry_status" class="form-control @error('entry_status') is-invalid @enderror">
+                            <option value="Valid" {{ old('entry_status') == 'Valid' ? 'selected' : '' }}>Valid</option>
+                            <option value="Invalid" {{ old('entry_status') == 'Invalid' ? 'selected' : '' }}>Invalid</option>
+                        </select>
+                        @error('entry_status')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="required-label faded-label" for="exit_status">Kevalidasian IP/Lokasi Keluar</label>
+                        <select name="exit_status" class="form-control @error('exit_status') is-invalid @enderror">
+                            <option value="Valid" {{ old('exit_status') == 'Valid' ? 'selected' : '' }}>Valid</option>
+                            <option value="Invalid" {{ old('exit_status') == 'Invalid' ? 'selected' : '' }}>Invalid</option>
+                        </select>
+                        @error('exit_status')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </form>
+                @endif
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+
 @section('extra-js')
 
 <script>

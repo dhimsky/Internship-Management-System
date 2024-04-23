@@ -9,6 +9,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class EmployeeController extends Controller
 {
@@ -77,7 +78,7 @@ class EmployeeController extends Controller
             $employee->photo = $filename_store;
         }
         $employee->save();
-        $request->session()->flash('success', 'Profil Anda Berhasil diupdate !');
+        Alert::success('Success', 'Profil Anda Berhasil diupdate !');
         return redirect()->route('employee.profile');
     }
 }

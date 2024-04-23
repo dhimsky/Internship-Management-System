@@ -28,6 +28,14 @@
         </li>
     </ul>
 </li>
+<li class="nav-item">
+    <a href="{{ route('employee.weeklyreports.index') }}" class="nav-link">
+        <i class="nav-icon fas fa-newspaper-o"></i>
+        <p>
+            Laporan Mingguan
+        </p>
+    </a>
+</li>
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">
         <i class="nav-icon fa fa-calendar-minus-o"></i>

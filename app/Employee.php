@@ -11,13 +11,24 @@ class Employee extends Model
     protected $table = 'employees';
     protected $primaryKey = 'id';
     protected $dates = ['created_at', 'updated_at', 'intern_period'];
-    protected $fillable = ['user_id', 'name', 'age', 'campus_origin', 'division', 'intern_period', 'photo'];
+    protected $fillable = ['user_id', 'name', 'age', 'campus_id', 'division_id', 'intern_period'];
+    
     public function user() {
         return $this->belongsTo('App\User');
+    }
+    public function campus() {
+        return $this->belongsTo('App\Campus');
+    }
+    public function division() {
+        return $this->belongsTo('App\Division');
     }
     
     public function attendance() {
         return $this->hasMany('App\Attendance');
+    }
+    
+    public function weeklyreports() {
+        return $this->hasMany('App\WeeklyReports');
     }
 
     public function leave() {

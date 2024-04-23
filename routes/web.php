@@ -31,12 +31,35 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth','
     Route::get('/reset-password', 'AdminController@reset_password')->name('reset-password');
     Route::put('/update-password', 'AdminController@update_password')->name('update-password');
 
+    Route::get('/admin/list-account', 'AdminManageController@index')->name('admin.index');
+    Route::post('/admin/add-account', 'AdminManageController@store')->name('admin.store');
+    Route::put('/admin/{id}', 'AdminManageController@update')->name('admin.update');
+    Route::delete('/admin/{id}', 'AdminManageController@destroy')->name('admin.delete');
+
+    Route::get('/iploc/list-iploc', 'IpLocController@index')->name('iploc.index');
+    Route::post('/iploc/add-iploc', 'IpLocController@store')->name('iploc.store');
+    Route::put('/iploc/{id}', 'IpLocController@update')->name('iploc.update');
+    Route::delete('/iploc/{id}', 'IpLocController@destroy')->name('iploc.delete');
+
+    Route::get('/division/list-division', 'DivisionController@index')->name('division.index');
+    Route::post('/division/add-division', 'DivisionController@store')->name('division.store');
+    Route::put('/division/{id}', 'DivisionController@update')->name('division.update');
+    Route::delete('/division/{id}', 'DivisionController@destroy')->name('division.delete');
+    
+    Route::get('/campus/list-campus', 'CampusController@index')->name('campus.index');
+    Route::post('/campus/add-campus', 'CampusController@store')->name('campus.store');
+    Route::put('/campus/{id}', 'CampusController@update')->name('campus.update');
+    Route::delete('/campus/{id}', 'CampusController@destroy')->name('campus.delete');
+
+    Route::get('admin/attendance/download', 'ExportattendancesController@downloadAttendancesPDF')->name('attendance.download');
+
     // Routes for employees //
     Route::get('/employees/list-employees', 'EmployeeController@index')->name('employees.index');
     Route::get('/employees/add-employee', 'EmployeeController@create')->name('employees.create');
-    // Route::put('/employees/{id}', 'EmployeeController@update')->name('employees.update');
-    Route::put('/employees/update-employee', 'EmployeeController@update')->name('employees.update');
+    Route::put('/employees/{id}', 'EmployeeController@update')->name('employees.update');
+    // Route::put('/employees/update-employee', 'EmployeeController@update')->name('employees.update');
     Route::post('/employees', 'EmployeeController@store')->name('employees.store');
+    Route::put('/employees/attendance/{id}', 'EmployeeController@updateval')->name('employees.attendance.updateval');
     Route::get('/employees/attendance', 'EmployeeController@attendance')->name('employees.attendance.index');
     Route::post('/employees/attendance', 'EmployeeController@attendance')->name('employees.attendance');
     Route::delete('/employees/attendance/{attendance_id}', 'EmployeeController@attendanceDelete')->name('employees.attendance.delete');
@@ -76,7 +99,12 @@ Route::namespace('Employee')->prefix('employee')->name('employee.')->middleware(
     Route::get('/attendance/register', 'AttendanceController@create')->name('attendance.create');
     Route::post('/attendance/{employee_id}', 'AttendanceController@store')->name('attendance.store');
     Route::put('/attendance/{attendance_id}', 'AttendanceController@update')->name('attendance.update');
-    // Routes for Attendances //
+    // Routes for WeeklyReports //
+    Route::get('/weeklyreports/list-reports', 'WeeklyReportsController@index')->name('weeklyreports.index');
+    Route::post('/weeklyreports/add-reports', 'WeeklyReportsController@store')->name('weeklyreports.store');
+
+    Route::get('download/{fileName}', 'WeeklyReportsController@download')->name('weeklyreports.download');
+
     /*
     *
     */

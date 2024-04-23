@@ -137,7 +137,32 @@
         {{-- <script src="/js/daterangepicker.js"></script> --}}
         {{-- <script src="/js/moment.min.js"></script> --}}
         @include('sweetalert::alert')
+        @if ($errors->any())
+            <script>
+                var errorMessages = [];
+                @foreach ($errors->all() as $error)
+                    errorMessages.push("{{ $error }}");
+                @endforeach
+            </script>
+        @endif
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
+        <script>
+            // Pastikan array errorMessages telah didefinisikan sebelumnya
+            if (errorMessages.length > 0) {
+                var errorMessage = "<ul>";
+                errorMessages.forEach(function(message) {
+                    errorMessage +=message + "<br>";
+                });
+                errorMessage += "</ul>";
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Errors',
+                    html: errorMessage,
+                });
+            }
+        </script>        
         @yield('extra-js')
     </body>
 </html>
-@stack('script-alt')

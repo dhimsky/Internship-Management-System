@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Attendance;
 use App\Holiday;
 use App\Rules\DateRange;
+use App\StatusAtten;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use phpDocumentor\Reflection\Location;
+use RealRashid\SweetAlert\Facades\Alert;
+
 class AttendanceController extends Controller
 {
     public function getIp(){
@@ -62,29 +65,66 @@ class AttendanceController extends Controller
 
     // Simpan data record absensi
     public function store(Request $request, $employee_id) {
+        $entry_ip = $request->ip();
+        $entry_location = $request->entry_location;
+
+        // Ambil daftar IP dan lokasi yang diizinkan dari tabel LocationAttendance
+        $allowedLocations = StatusAtten::all(); // Ambil semua data lokasi
+
+        // Set default status
+        $entry_status = 'Invalid';
+
+        // Periksa kecocokan IP dan/atau lokasi dengan data di tabel LocationAttendance
+        foreach ($allowedLocations as $location) {
+            if ($entry_ip === $location->ip || $entry_location === $location->location) {
+                $entry_status = 'Valid';
+                break; // Keluar dari loop jika sudah ada kecocokan
+            }
+        }
+
         $attendance = new Attendance([
             'employee_id' => $employee_id,
             'entry_ip' => $request->ip(),
             'time' => date('h'),
-            'entry_location' => $request->entry_location
+            'entry_location' => $request->entry_location,
+            'entry_status' => $entry_status,
         ]);
         $attendance->save();
         if(date('h')<=9) {
-         $request->session()->flash('success', 'Absensi Anda berhasil direkam sistem');
-         } else {
-            $request->session()->flash('success', ' Absensi Anda berhasil direkam sistem dengan catatan keterlambatan');
-         }
+            Alert::success('Success', 'Absensi Anda berhasil direkam sistem');
+        } else {
+            Alert::success('Success', 'Absensi Anda berhasil direkam sistem dengan catatan keterlambatan');
+        }
         return redirect()->route('employee.attendance.create')->with('employee', Auth::user()->employee);
     }
 
     // Hapus data record absensi
     public function update(Request $request, $attendance_id) {
         $attendance = Attendance::findOrFail($attendance_id);
+        $entry_ip = $request->ip();
+        $entry_location = $request->entry_location;
+
+        // Ambil daftar IP dan lokasi yang diizinkan dari tabel LocationAttendance
+        $allowedLocations = StatusAtten::all(); // Ambil semua data lokasi
+
+        // Set default status
+        $exit_status = 'Invalid';
+
+        // Periksa kecocokan IP dan/atau lokasi dengan data di tabel LocationAttendance
+        foreach ($allowedLocations as $location) {
+            if ($entry_ip === $location->ip || $entry_location === $location->location) {
+                $exit_status = 'Valid';
+                break; // Keluar dari loop jika sudah ada kecocokan
+            }
+        }
+
         $attendance->exit_ip = $request->ip();
         $attendance->exit_location = $request->exit_location;
         $attendance->registered = 'yes';
+        $attendance->exit_status = $exit_status;
+        $attendance->daily_report = $request->daily_report;
         $attendance->save();
-        $request->session()->flash('success', 'Absensi Anda berhasil diakhiri');
+        Alert::success('Success', 'Absensi Anda berhasil diakhiri');
         return redirect()->route('employee.attendance.create')->with('employee', Auth::user()->employee);
     }
 
@@ -176,7 +216,6 @@ class AttendanceController extends Controller
             }
             $start->addDay();
         }
-
         return $attendances;
     }
 
@@ -226,7 +265,6 @@ class AttendanceController extends Controller
         } else {
             $attendance->registered = 'absen';
         }
-
         return $attendance;
     }
 

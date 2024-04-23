@@ -31,18 +31,15 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="col-lg-11 col-md-10 mx-auto">
                     <!-- general form elements -->
                     @include('messages.alerts')
                     <div class="card card-primary">
-                        <div class="card-header">
-                            <h3 class="card-title">Daftar Cuti</h3>
-                        </div>
                         <div class="card-body">
                             @if ($leaves->count())
                             <table class="table table-hover" id="dataTable">
                                 <thead>
-                                    <tr>
+                                    <tr class="text-center">
                                         <th>#</th>
                                         <th>Tanggal Ajuan</th>
                                         <th>Alasan</th>
@@ -56,7 +53,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($leaves as $index => $leave)
-                                    <tr>
+                                    <tr class="text-center">
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $leave->created_at->format('d-m-Y') }}</td>
                                         <td>{{ $leave->reason }}</td>

@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">Daftar Cuti Karyawan</h1>
+                    <h1 class="m-0 text-dark">Daftar Cuti Magang</h1>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-6">
@@ -15,7 +15,7 @@
                             <a href="{{ route('admin.index') }}">Dashboard Admin</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            Daftar Cuti Karyawan
+                            Daftar Cuti Magang
                         </li>
                     </ol>
                 </div>
@@ -31,7 +31,7 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="col-lg-11 col-md-10 mx-auto">
                     <!-- general form elements -->
                     @include('messages.alerts')
                     @error('status')
@@ -40,19 +40,16 @@
                         </div>
                     @enderror
                     <div class="card card-primary">
-                        <div class="card-header">
-                            <h3 class="card-title">Daftar Cuti</h3>
-                        </div>
                         <div class="card-body">
                             @if ($leaves->count())
                             <table class="table table-hover" id="dataTable">
                                 <thead>
-                                    <tr>
+                                    <tr class="text-center">
                                         <th>#</th>
                                         <th>Tanggal Pengajuan</th>
                                         <th>Nama</th>
-                                        <th>Department</th>
-                                        <th>Jabatan</th>
+                                        <th>Divisi</th>
+                                        <th>Asal Kampus</th>
                                         <th>Alasan</th>
                                         <th>Status</th>
                                         <th class="none">Setengah Jam Kerja</th>
@@ -64,12 +61,12 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($leaves as $index => $leave)
-                                    <tr>
+                                    <tr class="text-center">
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $leave->created_at->format('d-m-Y') }}</td>
-                                        <td>{{ $leave->employee->first_name.' '.$leave->employee->last_name }}</td>
-                                        <td>{{ $leave->employee->department }}</td>
-                                        <td>{{ $leave->employee->desg }}</td>
+                                        <td>{{ $leave->employee->name }}</td>
+                                        <td>{{ $leave->employee->division }}</td>
+                                        <td>{{ $leave->employee->campus_origin}}</td>
                                         <td>{{ $leave->reason }}</td>
                                         <td>
                                             <h5>

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Attendance;
-use App\Department;
+use App\Campus;
+use App\Division;
 use App\Employee;
 use App\Http\Controllers\Controller;
 use App\Role;
@@ -14,16 +15,16 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManagerStatic as Image;
 use RealRashid\SweetAlert\Facades\Alert;
-
+use Illuminate\Validation\Rule;
 use function Ramsey\Uuid\v1;
 
 class EmployeeController extends Controller
 {
     public function index() {
-        $data = [
-            'employees' => Employee::all()
-        ];
-        return view('admin.employees.index')->with($data);
+        $employees = Employee::all();
+        $campus = Campus::all();
+        $division = Division::all();
+        return view('admin.employees.index', compact('employees', 'campus', 'division'));
     }
     // public function create() {
     //     $data = [
@@ -37,19 +38,19 @@ class EmployeeController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'age' => 'required',
-            'campus_origin' => 'required',
-            'division' => 'required',
+            'campus_id' => 'required',
+            'division_id' => 'required',
             'intern_period' => 'required',
-            'email' => 'required|email',
-            // 'photo' => 'image|nullable',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|confirmed|min:6'
         ],[
             'name.required' => 'Nama wajib diisi!',
             'age.required' => 'Umur wajib diisi!',
-            'campus_origin.required' => 'Asal Kampus wajib diisi!',
-            'division.required' => 'Divisi wajib diisi!',
+            'campus_id.required' => 'Asal Kampus wajib diisi!',
+            'division_id.required' => 'Divisi wajib diisi!',
             'intern_period.required' => 'Periode magang wajib diisi',
             'email.required' => 'Email wajib diisi!',
+            'email.unique' => 'Email sudah digunakan oleh pengguna lain.',
             'password.required' => 'Password wajib diisi!',
         ]);
         $user = User::create([
@@ -63,8 +64,8 @@ class EmployeeController extends Controller
             'user_id' => $user->id, 
             'name' => $request->name, 
             'age' => $request->age,
-            'campus_origin' => $request->campus_origin, 
-            'division' => $request->division, 
+            'campus_id' => $request->campus_id, 
+            'division_id' => $request->division_id, 
             'intern_period' => $request->intern_period,
             // 'photo'  => 'user.png'
         ];
@@ -94,32 +95,57 @@ class EmployeeController extends Controller
         return redirect()->route('admin.employees.index');
     }
 
-    public function update(Request $request, $id)
-{
-    // Ambil data karyawan berdasarkan ID
-    $employee = Employee::findOrFail($id);
+    public function update(Request $request, $id){
+        $employee = Employee::find($id);
 
-    // Lakukan validasi data dari $request
-    $this->validate($request, [
-        'name' => 'required',
-        'age' => 'required|numeric',
-        'campus_origin' => 'required',
-        'division' => 'required',
-        'intern_period' => 'required',
-        'email' => 'required|email',
-    ]);
-
-    // Update data karyawan berdasarkan input dari $request
-    $employee->name = $request->name;
-    $employee->age = $request->age;
-    $employee->campus_origin = $request->campus_origin;
-    $employee->division = $request->division;
-    $employee->intern_period = $request->intern_period;
-    $employee->save();
-
-    // Tampilkan pesan sukses atau redirect ke halaman lain
-    return redirect()->route('admin.employees.index')->with('success', 'Data karyawan berhasil diperbarui.');
-}
+        $this->validate($request, [
+            'name' => 'required',
+            'age' => 'required',
+            'campus_id' => 'required',
+            'division_id' => 'required',
+            'intern_period' => 'required',
+            'email' => [
+                'required',
+                Rule::unique('users')->ignore($employee->user->id),
+            ],
+        ], [
+            'name.required' => 'Nama wajib diisi!',
+            'age.required' => 'Umur wajib diisi!',
+            'campus_id.required' => 'Asal Kampus wajib diisi!',
+            'division_id.required' => 'Divisi wajib diisi!',
+            'intern_period.required' => 'Periode magang wajib diisi',
+            'email.required' => 'Email wajib diisi!',
+            'email.unique' => 'Email sudah digunakan oleh pengguna lain.',
+        ]);
+        $employee->name = $request->name;
+        $employee->age = $request->age;
+        $employee->campus_id = $request->campus_id;
+        $employee->division_id = $request->division_id;
+        $employee->intern_period = $request->intern_period;
+        $employee->save();
+        if ($employee->user) {
+            $employee->user->name = $request->input('name');
+            $employee->user->email = $request->input('email');
+            if ($request->filled('password')) {
+                $employee->user->password = Hash::make($request->input('password'));
+            }
+            $employee->user->save();
+        }
+        
+        // $user = User::find($id);
+        // if (!$user) {
+        //     abort(404, 'User not found');
+        // }
+        // $user->name = $request->name;
+        // $user->email = $request->email;
+        // if ($request->filled('password')) {
+        //     $user->password = Hash::make($request->password);
+        // }
+        // $user->save();
+        
+        Alert::success('Success', 'Data berhasil diubah!');
+        return redirect()->route('admin.employees.index');
+    }
 
 
     public function attendance(Request $request) {
@@ -134,12 +160,11 @@ class EmployeeController extends Controller
             $employees = $this->attendanceByDate(Carbon::now());
         }
         $data['employees'] = $employees;
-        // dd($employees->get(4)->attendanceToday->id);
-        return view('admin.employees.attendance')->with($data);
+        return view('admin.employees.attendance', $data)->with($data);
     }
 
     public function attendanceByDate($date) {
-        $employees = DB::table('employees')->select('id', 'name', 'division')->get();
+        $employees = DB::table('employees')->select('id', 'name', 'division_id')->get();
         $attendances = Attendance::all()->filter(function($attendance, $key) use ($date){
             return $attendance->created_at->dayOfYear == $date->dayOfYear;
         });
@@ -148,6 +173,16 @@ class EmployeeController extends Controller
             $employee->attendanceToday = $attendance;
             return $employee;
         });
+    }
+
+    public function updateval(Request $request, $id){
+        $employees = Attendance::find($id);
+        $employees->entry_status = $request->entry_status;
+        $employees->exit_status = $request->exit_status;
+        $employees->save();
+
+        Alert::success('Success', 'Data berhasil diubah!');
+        return redirect()->route('admin.employees.attendance');
     }
 
     public function destroy($employee_id) {
@@ -163,13 +198,12 @@ class EmployeeController extends Controller
         $user->delete();
         Alert::success('Success', 'Data berhasil di hapus!');
         return redirect()->route('admin.employees.index');
-
     }
 
     public function attendanceDelete($attendance_id) {
         $attendance = Attendance::findOrFail($attendance_id);
         $attendance->delete();
-        request()->session()->flash('success', 'Riwayat Absensi berhasil dihapus!');
+        Alert::success('Success', 'Riwayat Absensi berhasil di hapus!');
         return back();
     }
 

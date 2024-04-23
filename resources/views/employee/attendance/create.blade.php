@@ -8,7 +8,6 @@
                 <div class="col-sm-6">
                     <h1 class="m-0 text-dark">Register Absensi</h1>
                 </div>
-                <!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
@@ -19,28 +18,21 @@
                         </li>
                     </ol>
                 </div>
-                <!-- /.col -->
             </div>
-            <!-- /.row -->
         </div>
-        <!-- /.container-fluid -->
     </div>
-    <!-- /.content-header -->
 
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <!-- general form elements -->
+                <div class="col-lg-11 mx-auto">
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">Absensi Hari ini <?php $time=date("H:i:s"); $dt=date("d-M-Y"); echo $dt." ".$time;?>                
                             </h3>
                         </div>
-                        <!-- /.card-header -->
                         @include('messages.alerts')
-                        <!-- form start -->
                         @if (!$attendance)
                         <form role="form" method="post" action="{{ route('employee.attendance.store', $employee->id) }}" >
                         @else
@@ -190,6 +182,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="text-right">
+                                    <div class="form-group">
+                                        <label for="daily_report" class="d-block text-center">Laporan Harian</label>
+                                        <textarea class="form-control text-center"  name="daily_report" id="daily_report" cols="28" rows="3" placeholder="Laporan harian hanya akan tersimpan ketika melakukan Absen Keluar."></textarea>
+                                    </div>
+                                </div>
                                 @else
                                 <div class="row text-center">
                                     <div class="col-md-3">
@@ -237,9 +235,13 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="text-right">
+                                    <div class="form-group">
+                                        <label for="daily_report" class="d-block text-center">Laporan Harian</label>
+                                        <textarea class="form-control text-center"  name="daily_report" id="daily_report" cols="28" rows="3" placeholder="Tidak ada laporan." disabled  style="background: #333; color:#f4f4f4">{{ $attendance->daily_report }}</textarea>
+                                    </div>
+                                </div>
                                 @endif
-                                
-                                
                             </div>
                             <!-- /.card-body -->
                             @if (!$registered_attendance)
@@ -256,17 +258,12 @@
                             </div>   
                             @endif
                         <?php } ?>
-                            
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>
-        <!-- /.container-fluid -->
     </section>
-    <!-- /.content -->
-
 @endsection
 
 @section('extra-js')

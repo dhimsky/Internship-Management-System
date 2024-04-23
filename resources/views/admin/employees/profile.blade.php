@@ -7,7 +7,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">Profil</h1>
+                <h1 class="m-0 text-dark">Detail Profile</h1>
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -16,7 +16,7 @@
                         <a href="{{ route('admin.index') }}">Dashboard</a>
                     </li>
                     <li class="breadcrumb-item active">
-                        Profil
+                        Detail Profile
                     </li>
                 </ol>
             </div>
@@ -34,9 +34,6 @@
         <div class="row">
             <div class="col-md-6 mx-auto">
                 <div class="card card-primary">
-                    <div class="card-header">
-                        <h5 class="text-center mt-2">Profil Karyawan</h5>
-                    </div>
                     <div class="card-body">
                         @include('messages.alerts')
                         <div class="row mb-3">
@@ -56,12 +53,16 @@
                                 <td>{{ $employee->age }}</td>
                             </tr>
                             <tr>
+                                <td>Email</td>
+                                <td>{{ $employee->user->email }}</td>
+                            </tr>
+                            <tr>
                                 <td>Asal Kampus</td>
-                                <td>{{ $employee->campus_origin }}</td>
+                                <td>{{ $employee->campus->name }}</td>
                             </tr>
                             <tr>
                                 <td>Divisi</td>
-                                <td>{{ $employee->division }}</td>
+                                <td>{{ $employee->division->name }}</td>
                             </tr>
                             <tr>
                                 <td>Periode Magang</td>

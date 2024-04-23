@@ -16,26 +16,26 @@
 
         <li class="nav-item dropdown user user-menu">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                @if (Auth::user()->employee)
-                <img src="/storage/{{ Auth::user()->employee->photo }}" class="user-image img-circle elevation-2 alt="User Image">
+                {{-- @if (Auth::user()->employee)
+                <img src="/storage/{{ Auth::user()->employee->photo }}" class="user-image img-circle elevation-2" alt="User Image">
                 @else
-                <img src="/dist/img/firyanul.png" class="user-image img-circle elevation-2 alt="User Image">
-                @endif
+                <img src="" class="user-image img-circle elevation-2" alt="User Image">
+                @endif --}}
                 <span class="hidden-xs">{{ Auth::user()->name }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <li class="user-header bg-primary">
-                @if (Auth::user()->employee)
+                {{-- @if (Auth::user()->employee)
                 <img  src="/storage/employee_photos/{{ Auth::user()->employee->photo }}"
                 class="img-circle elevation-2" alt="User Image">
                 @else
                 <img src="/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-                @endif
+                @endif --}}
         
                 <p>
                     {{ Auth::user()->name }}
                     @if ( Auth::user()->employee )
-                    - {{ Auth::user()->employee->division }}, {{ Auth::user()->employee->campus_origin }}
+                    - {{ Auth::user()->employee->division->name }}, {{ Auth::user()->employee->campus->name }}
                     @endif 
                 </p>
                 </li>

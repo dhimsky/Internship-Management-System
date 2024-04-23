@@ -99,20 +99,23 @@
                                     dari rentang
                                 @endif
                             </div>
-                            
                         </div>
                         <div class="card-body">
                             @if ($attendances->count())
                             <table class="table table-bordered table-hover" id="dataTable">
                                 <thead>
-                                    <tr>
+                                    <tr class="text-center">
                                         <th>#</th>
                                         <th>Tanggal</th>
                                         <th>Status</th>
                                         <th>Waktu Absensi</th>
-                                        <th>Lokasi Absensi</th>
+                                        {{-- <th>Lokasi Absensi</th> --}}
                                         <th>Waktu Selesai</th>
-                                        <th>Lokasi Selesai</th>
+                                        {{-- <th>Lokasi Selesai</th>
+                                        <th>Ip Masuk</th> --}}
+                                        <th>Status Masuk</th>
+                                        <th>Status Keluar</th>
+                                        <th class="none">Laporan Harian</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -122,14 +125,30 @@
                                         @if ($attendance->registered == 'yes')
                                         <td>{{ $attendance->created_at->format('d-m-Y') }}</td>
                                         <td><h5 class="text-center"><span class="badge badge-pill badge-success">Hadir</span> </h5></td>
-                                        <td>{{ $attendance->created_at->format('H:i:s') }}</td>
-                                        <td>{{ $attendance->entry_location }}</td>
-                                        <td>{{ $attendance->updated_at->format('H:i:s') }}</td>
-                                        <td>{{ $attendance->exit_location }}</td>
+                                        <td class="text-center">{{ $attendance->created_at->format('H:i:s') }}</td>
+                                        {{-- <td>{{ $attendance->entry_location }}</td> --}}
+                                        <td class="text-center">{{ $attendance->updated_at->format('H:i:s') }}</td>
+                                        {{-- <td>{{ $attendance->exit_location }}</td> --}}
+                                        {{-- <td>{{ $attendance->entry_ip }}</td> --}}
+                                        <td class="text-center">
+                                            <span class="badge {{ $attendance->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">
+                                                {{ $attendance->entry_status }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge {{ $attendance->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">
+                                                {{ $attendance->exit_status }}
+                                            </span>
+                                        </td>
+                                        <td>{{ $attendance->daily_report }}</td>
                                         @elseif($attendance->registered == 'no')
                                         <td>{{ $attendance->created_at->format('d-m-Y') }}</td>
                                         <td><h5 class="text-center"><span class="badge badge-pill badge-danger">Absen</span> </h5></td>
                                         <td class="text-center">Belum Ada Riwayat</td>
+                                        {{-- <td class="text-center">Belum Ada Riwayat</td> --}}
+                                        <td class="text-center">Belum Ada Riwayat</td>
+                                        {{-- <td class="text-center">Belum Ada Riwayat</td>
+                                        <td class="text-center">Belum Ada Riwayat</td> --}}
                                         <td class="text-center">Belum Ada Riwayat</td>
                                         <td class="text-center">Belum Ada Riwayat</td>
                                         <td class="text-center">Belum Ada Riwayat</td>
@@ -137,6 +156,10 @@
                                         <td>{{ $attendance->created_at->format('d-m-Y') }}</td>
                                         <td><h5 class="text-center"><span class="badge badge-pill badge-info">Minggu</span> </h5></td>
                                         <td class="text-center">Belum Ada Riwayat</td>
+                                        {{-- <td class="text-center">Belum Ada Riwayat</td> --}}
+                                        <td class="text-center">Belum Ada Riwayat</td>
+                                        {{-- <td class="text-center">Belum Ada Riwayat</td>
+                                        <td class="text-center">Belum Ada Riwayat</td> --}}
                                         <td class="text-center">Belum Ada Riwayat</td>
                                         <td class="text-center">Belum Ada Riwayat</td>
                                         <td class="text-center">Belum Ada Riwayat</td>
@@ -144,6 +167,10 @@
                                         <td>{{ $attendance->created_at->format('d-m-Y') }}</td>
                                         <td><h5 class="text-center"><span class="badge badge-pill badge-info">Leave</span> </h5></td>
                                         <td class="text-center">Belum Ada Riwayat</td>
+                                        {{-- <td class="text-center">Belum Ada Riwayat</td> --}}
+                                        <td class="text-center">Belum Ada Riwayat</td>
+                                        {{-- <td class="text-center">Belum Ada Riwayat</td>
+                                        <td class="text-center">Belum Ada Riwayat</td> --}}
                                         <td class="text-center">Belum Ada Riwayat</td>
                                         <td class="text-center">Belum Ada Riwayat</td>
                                         <td class="text-center">Belum Ada Riwayat</td>
@@ -151,16 +178,32 @@
                                         <td>{{ $attendance->created_at->format('d-m-Y') }}</td>
                                         <td><h5 class="text-center"><span class="badge badge-pill badge-success">Hari Libur</span> </h5></td>
                                         <td class="text-center">Belum Ada Riwayat</td>
+                                        {{-- <td class="text-center">Belum Ada Riwayat</td> --}}
+                                        <td class="text-center">Belum Ada Riwayat</td>
+                                        {{-- <td class="text-center">Belum Ada Riwayat</td>
+                                        <td class="text-center">Belum Ada Riwayat</td> --}}
                                         <td class="text-center">Belum Ada Riwayat</td>
                                         <td class="text-center">Belum Ada Riwayat</td>
                                         <td class="text-center">Belum Ada Riwayat</td>
                                         @else
                                         <td>{{ $attendance->created_at->format('d-m-Y') }}</td>
                                         <td><h5 class="text-center"><span class="badge badge-pill badge-warning">Setengah Jam Kerja</span> </h5></td>
-                                        <td>{{ $attendance->created_at->format('H:i:s') }}</td>
-                                        <td>{{ $attendance->entry_location }}</td>
-                                        <td> - </td>
-                                        <td> - </td>
+                                        <td class="text-center">{{ $attendance->created_at->format('H:i:s') }}</td>
+                                        {{-- <td>{{ $attendance->entry_location }}</td> --}}
+                                        <td class="text-center"> - </td>
+                                        {{-- <td> - </td>
+                                        <td>{{ $attendance->entry_ip }}</td> --}}
+                                        <td class="text-center">
+                                            <span class="badge {{ $attendance->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">
+                                                {{ $attendance->entry_status }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge {{ $attendance->exit_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">
+                                                {{ $attendance->exit_status }}
+                                            </span>
+                                        </td>
+                                        <td>{{ $attendance->daily_report }}</td>
                                         @endif
                                     </tr>
                                 @endforeach
@@ -174,14 +217,10 @@
                             
                         </div>
                     </div>
-                    <!-- general form elements -->
-                    
                 </div>
             </div>
         </div>
-        <!-- /.container-fluid -->
     </section>
-    <!-- /.content -->
 
 @endsection
 @section('extra-js')
