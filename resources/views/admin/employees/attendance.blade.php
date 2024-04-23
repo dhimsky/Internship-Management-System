@@ -259,11 +259,11 @@
                             </span>
                         @enderror
                     </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
                 </form>
                 @endif
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Simpan</button>
             </div>
         </div>
     </div>
