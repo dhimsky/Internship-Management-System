@@ -46,7 +46,7 @@
                                         <th>Judul</th>
                                         <th>Tanggal Upload</th>
                                         <th>Status</th>
-                                        <th class="none">Deskripsi</th>
+                                        <th class="none">Nilai</th>
                                         <th class="none">File</th>
                                     </tr>
                                 </thead>
@@ -71,7 +71,7 @@
                                                 </span> 
                                             </h5>
                                         </td>
-                                        <td>{{ $weeklyreport->description }}</td>
+                                        <td>{{ $weeklyreport->value ? $weeklyreport->value : 'belum dinilai' }}</td>
                                         <td>
                                             @if ($weeklyreport->file)
                                             <a href="{{ route('employee.weeklyreports.download', $weeklyreport->file) }}" target="_blank">{{ $weeklyreport->file }}</a>

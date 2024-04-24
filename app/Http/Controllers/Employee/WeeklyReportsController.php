@@ -21,7 +21,7 @@ class WeeklyReportsController extends Controller
         $request->validate([
             'tittle' => 'required',
             'file' => 'required|file|mimes:pdf|max:2048',
-            'description' => 'nullable',
+            'value' => 'nullable',
             'status' => 'nullable',
         ],[
             'tittle.required' => 'Judul wajib diisi!',
@@ -36,7 +36,7 @@ class WeeklyReportsController extends Controller
             'employee_id' => $employee->id,
             'status' => 'Pending',
             'tittle' => $request->tittle,
-            'description' => $request->description,
+            'value' => null,
         ];
     
         if ($request->hasFile('file')) {
