@@ -106,7 +106,7 @@
                 @csrf
                 @method('POST')
                 <div class="form-group mb-3">
-                    <label class="required-label faded-label" for="name" >Nama Divisi</label>
+                    <label class="required-label faded-label" for="name" >Nama Kampus</label>
                     <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" placeholder="Masukan Divisi">
                     @error('name')
                     <span class="invalid-feedback" role="alert">
