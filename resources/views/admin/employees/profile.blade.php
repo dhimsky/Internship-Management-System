@@ -49,12 +49,12 @@
                                 <td>{{ $employee->name }}</td>
                             </tr>
                             <tr>
-                                <td>Umur</td>
-                                <td>{{ $employee->age }}</td>
-                            </tr>
-                            <tr>
                                 <td>Email</td>
                                 <td>{{ $employee->user->email }}</td>
+                            </tr>
+                            <tr>
+                                <td>Umur</td>
+                                <td>{{ $employee->age }}</td>
                             </tr>
                             <tr>
                                 <td>Asal Kampus</td>
@@ -66,11 +66,11 @@
                             </tr>
                             <tr>
                                 <td>Tanggal Mulai Magang</td>
-                                <td>{{ $employee->start_date }}</td>
+                                <td>{{ \Carbon\Carbon::parse($employee->start_date)->format('d F Y') }}</td>
                             </tr>
                             <tr>
                                 <td>Tanggal Selesai Magang</td>
-                                <td>{{ $employee->end_date }}</td>
+                                <td>{{ \Carbon\Carbon::parse($employee->end_date)->format('d F Y') }}</td>
                             </tr>
                         </table>
                     </div>
