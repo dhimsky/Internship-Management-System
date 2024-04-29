@@ -128,7 +128,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Admin</h5>
+                <h5 class="modal-title">Edit Divisi</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
             </div>
             <!-- Isi modal body -->
@@ -138,7 +138,7 @@
                     @csrf
                     @method('PUT')
                     <div class="form-group mb-3">
-                        <label class="required-label faded-label" for="name">Divisi</label>
+                        <label class="required-label faded-label" for="name">Nama Divisi</label>
                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $division->name }}" placeholder="Masukkan Divisi">
                         @error('name')
                             <span class="invalid-feedback" role="alert">

@@ -81,7 +81,6 @@
                                         @endif
                                         <td>{{ $leave->description }}</td>
                                         <td>
-                                            <a href="{{ route('employee.leaves.edit', $leave->id) }}" class="btn btn-flat btn-warning">Edit</a>
                                             <button type="button" class="btn btn-flat btn-danger" 
                                             data-toggle="modal" 
                                             data-target="#deleteModalCenter{{ $index + 1 }}"

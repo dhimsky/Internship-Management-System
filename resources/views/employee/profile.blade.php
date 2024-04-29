@@ -48,43 +48,45 @@
                         </div>
                         <table class="table profile-table table-hover">
                             <tr>
-                                <td>First Name</td>
-                                <td>{{ $employee->first_name }}</td>
+                                <td>Nama</td>
+                                <td>{{ $employee->name }}</td>
                             </tr>
                             <tr>
-                                <td>Last Name</td>
-                                <td>{{ $employee->last_name }}</td>
+                                <td>Email</td>
+                                <td>{{ $employee->user->email }}</td>
                             </tr>
                             <tr>
-                                <td>Date of Birth</td>
-                                <td>{{ $employee->dob->format('d M, Y') }}</td>
+                                <td>Umur</td>
+                                <td>{{ $employee->age }}</td>
                             </tr>
                             <tr>
-                                <td>Gender</td>
-                                <td>{{ $employee->sex }}</td>
+                                <td>Asal Kampus</td>
+                                <td>{{ $employee->campus->name }}</td>
+                            </tr>
+                            <tr>
+                                <td>Divisi</td>
+                                <td>{{ $employee->division->name }}</td>
                             </tr>
                             
                             <tr>
-                                <td>Join Date</td>
-                                <td>{{ $employee->join_date->format('d M, Y') }}</td>
+                                <td>Tanggal Mulai Magang</td>
+                                <td>{{ \Carbon\Carbon::parse($employee->start_date)->format('d F Y') }}</td>
                             </tr>
                             <tr>
-                                <td>Designation</td>
-                                <td>{{ $employee->desg }}</td>
-                            </tr>
-                            <tr>
-                                <td>Department</td>
-                                <td>{{ $employee->department->name }}</td>
-                            </tr>
-                            <tr>
-                                <td>Salary</td>
-                                <td>₹ {{ $employee->salary }}</td>
+                                <td>Tanggal Selesai Magang</td>
+                                <td>{{ \Carbon\Carbon::parse($employee->end_date)->format('d F Y') }}</td>
                             </tr>
                         </table>
                     </div>
                     <div class="card-footer text-center">
-                        <a href="{{ route('employee.profile-edit', $employee->id) }}" class="btn btn-flat btn-primary">Edit Profile</a>
+                        <a href="" data-toggle="modal" data-target=".editEmployee{{ $employee->id }}" title="Edit Profile" class="btn btn-flat btn-primary">Upload Foto</a>
                     </div>
+                    <div class="card-footer text-center">
+                        <a href="" data-toggle="modal" data-target=".ubahPassword" title="Ubah Password" class="btn btn-flat btn-warning">Ubah Password</a>
+                    </div>
+                    {{-- <div class="card-footer text-center">
+                        <a href="{{ route('employee.profile-edit', $employee->id) }}" class="btn btn-flat btn-primary">Edit Profile</a>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -96,4 +98,84 @@
 
 <!-- /.content-wrapper -->
 
+<div class="modal fade editEmployee{{ $employee->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Peserta Magang</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <form action="{{ route('employee.profile.updatePhoto', $employee->id) }}" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group mb-3">
+                        <label class="required-label faded-label" for="photo">Foto Profile</label>
+                        <input type="file" name="photo" class="custom-file @error('photo') is-invalid @enderror" accept="image/png, image/jpeg, image/jpg">
+                        @error('photo')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade ubahPassword" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ubah Password</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <form action="{{ route('employee.profile.update-password') }}" method="POST">
+                <div class="modal-body">
+                    @csrf
+                    @method('PUT')
+                    <div class="input-group mb-3">
+                        <input type="password" name="old_password" class="form-control" placeholder="Current Password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    @if (session('error'))
+                            <div class="text-danger">
+                                Wrong Password
+                            </div>
+                    @endif
+                    <div class="input-group mb-3">
+                        <input type="password" name="password" class="form-control" placeholder="New Password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm Password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection

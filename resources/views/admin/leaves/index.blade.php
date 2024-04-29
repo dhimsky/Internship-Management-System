@@ -49,7 +49,6 @@
                                         <th>Tanggal Pengajuan</th>
                                         <th>Nama</th>
                                         <th>Divisi</th>
-                                        <th>Asal Kampus</th>
                                         <th>Alasan</th>
                                         <th>Status</th>
                                         <th class="none">Setengah Jam Kerja</th>
@@ -65,8 +64,7 @@
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $leave->created_at->format('d-m-Y') }}</td>
                                         <td>{{ $leave->employee->name }}</td>
-                                        <td>{{ $leave->employee->division }}</td>
-                                        <td>{{ $leave->employee->campus_origin}}</td>
+                                        <td>{{ $leave->employee->division->name }}</td>
                                         <td>{{ $leave->reason }}</td>
                                         <td>
                                             <h5>

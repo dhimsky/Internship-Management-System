@@ -1,5 +1,4 @@
 @extends('layouts.app')        
-
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -45,9 +44,9 @@
                                         <th>#</th>
                                         <th>Judul</th>
                                         <th>Tanggal Upload</th>
-                                        <th>Status</th>
-                                        <th class="none">Nilai</th>
+                                        <th>Nilai</th>
                                         <th class="none">File</th>
+                                        <th class="none">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -59,19 +58,19 @@
                                         <td>
                                             <h5>
                                                 <span 
-                                                @if ($weeklyreport->status == 'Pending')
-                                                    class="badge badge-pill badge-warning"
-                                                @elseif($weeklyreport->status == 'Declined')
-                                                    class="badge badge-pill badge-danger"
-                                                @elseif($weeklyreport->status == 'Approved')
-                                                    class="badge badge-pill badge-success"
-                                                @endif
-                                                >
-                                                    {{ ucfirst($weeklyreport->status) }}
+                                                    @if ($weeklyreport->value === null)
+                                                        class="badge badge-pill badge-info"
+                                                    @elseif ($weeklyreport->value)
+                                                        class="badge badge-pill badge-success"
+                                                    @endif>
+                                                    @if ($weeklyreport->value === null)
+                                                        belum dinilai
+                                                    @else
+                                                        {{ ucfirst($weeklyreport->value) }}
+                                                    @endif
                                                 </span> 
                                             </h5>
                                         </td>
-                                        <td>{{ $weeklyreport->value ? $weeklyreport->value : 'belum dinilai' }}</td>
                                         <td>
                                             @if ($weeklyreport->file)
                                             <a href="{{ route('employee.weeklyreports.download', $weeklyreport->file) }}" target="_blank">{{ $weeklyreport->file }}</a>
@@ -79,10 +78,47 @@
                                                 N/A
                                             @endif
                                         </td>
+                                        <td>
+                                            <button 
+                                            class="btn btn-danger"
+                                            data-toggle="modal" 
+                                            data-target="#deleteModalCenter{{ $index + 1 }}"
+                                            >Hapus</button>
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                            @for ($i = 1; $i < $weeklyreports->count()+1; $i++)
+                                <!-- Modal -->
+                                <div class="modal fade" id="deleteModalCenter{{ $i }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle1{{ $i }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="card card-danger">
+                                                <div class="card-header">
+                                                    <h5 style="text-align: center !important">Yakin ingin dihapus?</h5>
+                                                </div>
+                                                <div class="card-body text-center d-flex" style="justify-content: center">
+                                                    
+                                                    <button type="button" class="btn flat btn-secondary" data-dismiss="modal">Tidak</button>
+                                                    
+                                                    <form 
+                                                    action="{{ route('employee.weeklyreports.delete', $weeklyreports->get($i-1)->id) }}"
+                                                    method="POST"
+                                                    >
+                                                    @csrf
+                                                    @method('DELETE')
+                                                        <button type="submit" class="btn flat btn-danger ml-1">Ya</button>
+                                                    </form>
+                                                </div>
+                                                <div class="card-footer text-center">
+                                                    <small>Aksi ini tidak bisa dilakukan</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endfor 
                             @else
                             <div class="alert alert-info text-center" style="width:50%; margin: 0 auto">
                                 <a href="" data-toggle="modal" data-target=".TambahData">
@@ -103,7 +139,7 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Divisi</h5>
+                    <h5 class="modal-title">Kirim Laporan Mingguan</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                     </button>
                 </div>
@@ -121,17 +157,8 @@
                         @enderror
                     </div>
                     <div class="form-group mb-3">
-                        <label class="required-label faded-label" for="description" >Deskripsi</label>
-                        <input type="text" name="description" class="form-control @error('description') is-invalid @enderror" value="{{ old('description') }}" placeholder="Masukan Deskripsi">
-                        @error('description')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-                    <div class="form-group mb-3">
                         <label class="required-label faded-label" for="file" >Upload File (PDF)</label>
-                        <input type="file" name="file" id="file" class="form-control @error('file') is-invalid @enderror" accept="application/pdf" placeholder="Upload File">
+                        <input type="file" name="file" id="file" class="custom-file @error('file') is-invalid @enderror" accept="application/pdf" placeholder="Upload File">
                         @error('file')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>

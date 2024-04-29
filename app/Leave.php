@@ -10,7 +10,7 @@ class Leave extends Model
 {
     use HasFactory;
     protected $table = 'leaves';
-    protected $fillable = ['employee_id', 'reason', 'description', 'half_day', 'start_date', 'end_date'];
+    protected $fillable = ['employee_id', 'reason', 'evidence', 'description', 'half_day', 'start_date', 'end_date'];
     protected $dates = ['created_at', 'updated_at', 'start_date', 'end_date'];
     public function employee() {
         return $this->belongsTo('App\Employee');

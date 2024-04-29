@@ -90,15 +90,23 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $employee->name }}</td>
                                     @if($employee->attendanceToday)
-                                        <td><h6 class="text-center"><span class="badge badge-pill badge-success">Terekam</span></h6></td>
+                                    <td>
+                                        <h6 class="text-center">
+                                            @if ($employee->attendanceToday->registered === null)
+                                                <span class="badge badge-pill badge-warning">Setengah Jam Kerja</span>
+                                            @else
+                                                <span class="badge badge-pill badge-success">Hadir</span>
+                                            @endif
+                                        </h6>
+                                    </td>
                                         <td>
                                             Terekam sejak {{ $employee->attendanceToday->created_at->format('H:i:s') }} dari {{ $employee->attendanceToday->entry_location}} dengan alamat IP {{ $employee->attendanceToday->entry_ip}} <span class="badge {{ $employee->attendanceToday->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
                                                 {{ $employee->attendanceToday->entry_status }}
                                             </span>
                                         </td>
-                                        <?php if($employee->attendanceToday->time<=9 && $employee->attendanceToday->time>=7) { ?>
+                                        <?php if($employee->attendanceToday->time>=7 && $employee->attendanceToday->time<=9) { ?>
                                             <td><h6 class="text-center"><span class="badge badge-pill badge-success">Hadir Tepat Waktu</span></h6></td>
-                                        <?php } elseif ($employee->attendanceToday->time>9 && $employee->attendanceToday->time<=17) {
+                                        <?php } elseif ($employee->attendanceToday->time>9 && $employee->attendanceToday->time<=15) {
                                             ?><td><h6 class="text-center"><span class="badge badge-pill badge-warning">Hadir Terlambat</span></h6></td><?php
                                         } else {
                                             ?><td><h6 class="text-center"><span class="badge badge-pill badge-danger">Absensi Tidak Valid</span></h6></td><?php 
@@ -116,7 +124,7 @@
                                         <td><h6 class="text-center"><span class="badge badge-pill badge-danger">Belum Ada Riwayat</span></h6></td>
                                         <td>-</td>
                                     @endif
-                                    <td>{{ $employee->division_id }}</td>
+                                    <td class="text-center">{{ $employee->division_name }}</td>
 
                                     {{-- <td>
                                     <?php 
@@ -204,7 +212,7 @@
                     </button>
                 </div>
             <div class="modal-body">
-                <form action="{{ route('admin.attendance.download') }}" method="GET">
+                <form name="pdfForm" action="{{ route('admin.attendance.download') }}" method="GET">
                     <div class="card-body">
                         <div class="input-group mx-auto" style="width:100%">
                             <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>
@@ -268,9 +276,22 @@
         </div>
     </div>
 </div>
+
 @endforeach
 
 @section('extra-js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('#pdfForm');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const url = this.getAttribute('action') + '?' + new URLSearchParams(new FormData(this)).toString();
+    
+            // Open the PDF in a new tab
+            window.open(url, '_blank');
+        });
+    });
+    </script>
 
 <script>
     $(document).ready(function() {

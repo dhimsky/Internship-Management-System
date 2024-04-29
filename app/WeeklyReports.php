@@ -17,7 +17,6 @@ class WeeklyReports extends Model
         'employee_id',
         'tittle',
         'file',
-        'status',
         'description',
         'created_at'
     ];

@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Role;
 use App\User;
 use Carbon\Carbon;
+use App\Rules\DateRange;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -40,15 +41,17 @@ class EmployeeController extends Controller
             'age' => 'required',
             'campus_id' => 'required',
             'division_id' => 'required',
-            'intern_period' => 'required',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed|min:6'
+            'password' => 'required|confirmed|min:6',
+            'start_date' => 'required',
+            'end_date' => 'required',
         ],[
             'name.required' => 'Nama wajib diisi!',
             'age.required' => 'Umur wajib diisi!',
+            'start_date.required' => 'Tanggal Mulai Magang wajib diisi!',
+            'end_date.required' => 'Tanggal Selesai Magang wajib diisi!',
             'campus_id.required' => 'Asal Kampus wajib diisi!',
             'division_id.required' => 'Divisi wajib diisi!',
-            'intern_period.required' => 'Periode magang wajib diisi',
             'email.required' => 'Email wajib diisi!',
             'email.unique' => 'Email sudah digunakan oleh pengguna lain.',
             'password.required' => 'Password wajib diisi!',
@@ -66,29 +69,10 @@ class EmployeeController extends Controller
             'age' => $request->age,
             'campus_id' => $request->campus_id, 
             'division_id' => $request->division_id, 
-            'intern_period' => $request->intern_period,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
             // 'photo'  => 'user.png'
         ];
-        // Photo upload
-        // if ($request->hasFile('photo')) {
-        //     // GET FILENAME
-        //     $filename_ext = $request->file('photo')->getClientOriginalName();
-        //     // GET FILENAME WITHOUT EXTENSION
-        //     $filename = pathinfo($filename_ext, PATHINFO_FILENAME);
-        //     // GET EXTENSION
-        //     $ext = $request->file('photo')->getClientOriginalExtension();
-        //     //FILNAME TO STORE
-        //     $filename_store = $filename.'_'.time().'.'.$ext;
-        //     // UPLOAD IMAGE
-        //     // $path = $request->file('photo')->storeAs('public'.DIRECTORY_SEPARATOR.'employee_photos', $filename_store);
-        //     // add new file name
-        //     $image = $request->file('photo');
-        //     $image_resize = Image::make($image->getRealPath());              
-        //     $image_resize->resize(300, 300);
-        //     $image_resize->save(public_path(DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'employee_photos'.DIRECTORY_SEPARATOR.$filename_store));
-        //     $employeeDetails['photo'] = $filename_store;
-        // }
-        
         Employee::create($employeeDetails);
         
         Alert::success('Success', 'Data berhasil ditambahkan!');
@@ -97,13 +81,13 @@ class EmployeeController extends Controller
 
     public function update(Request $request, $id){
         $employee = Employee::find($id);
-
         $this->validate($request, [
             'name' => 'required',
             'age' => 'required',
             'campus_id' => 'required',
             'division_id' => 'required',
-            'intern_period' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
             'email' => [
                 'required',
                 Rule::unique('users')->ignore($employee->user->id),
@@ -111,9 +95,10 @@ class EmployeeController extends Controller
         ], [
             'name.required' => 'Nama wajib diisi!',
             'age.required' => 'Umur wajib diisi!',
+            'start_date.required' => 'Tanggal Mulai Magang wajib diisi!',
+            'end_date.required' => 'Tanggal Selesai Magang wajib diisi!',
             'campus_id.required' => 'Asal Kampus wajib diisi!',
             'division_id.required' => 'Divisi wajib diisi!',
-            'intern_period.required' => 'Periode magang wajib diisi',
             'email.required' => 'Email wajib diisi!',
             'email.unique' => 'Email sudah digunakan oleh pengguna lain.',
         ]);
@@ -121,8 +106,11 @@ class EmployeeController extends Controller
         $employee->age = $request->age;
         $employee->campus_id = $request->campus_id;
         $employee->division_id = $request->division_id;
-        $employee->intern_period = $request->intern_period;
+        $employee->start_date = $request->start_date;
+        $employee->end_date = $request->end_date;
+
         $employee->save();
+
         if ($employee->user) {
             $employee->user->name = $request->input('name');
             $employee->user->email = $request->input('email');
@@ -150,7 +138,7 @@ class EmployeeController extends Controller
 
     public function attendance(Request $request) {
         $data = [
-            'date' => null
+            'date' => null,
         ];
         if($request->all()) {
             $date = Carbon::create($request->date);
@@ -162,9 +150,33 @@ class EmployeeController extends Controller
         $data['employees'] = $employees;
         return view('admin.employees.attendance', $data)->with($data);
     }
+    // public function attendance(Request $request) {
+    //     $data = [
+    //         'date' => null,
+    //         'employees' => null
+    //     ];
+    
+    //     if ($request->filled('date')) {
+    //         $date = Carbon::createFromFormat('Y-m-d', $request->date);
+    //     } else {
+    //         $date = Carbon::now();
+    //     }
+    
+    //     // Mengambil semua data Employee beserta relasi Division
+    //     $employees = Employee::with('division')->get();
+    
+    //     $data['date'] = $date->format('d M, Y');
+    //     $data['employees'] = $employees;
+    
+    //     return view('admin.employees.attendance', $data);
+    // }
 
     public function attendanceByDate($date) {
-        $employees = DB::table('employees')->select('id', 'name', 'division_id')->get();
+        $employees = DB::table('employees')
+        ->select('employees.id', 'employees.name', 'employees.division_id', 'division.name AS division_name')
+        ->leftJoin('division', 'employees.division_id', '=', 'division.id')
+        ->get();
+
         $attendances = Attendance::all()->filter(function($attendance, $key) use ($date){
             return $attendance->created_at->dayOfYear == $date->dayOfYear;
         });
@@ -191,7 +203,7 @@ class EmployeeController extends Controller
         // detaches all the roles
         DB::table('leaves')->where('employee_id', '=', $employee_id)->delete();
         DB::table('attendances')->where('employee_id', '=', $employee_id)->delete();
-        DB::table('expenses')->where('employee_id', '=', $employee_id)->delete();
+        DB::table('weeklyreports')->where('employee_id', '=', $employee_id)->delete();
         $employee->delete();
         $user->roles()->detach();
         // deletes the users

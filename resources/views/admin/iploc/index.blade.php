@@ -139,7 +139,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Admin</h5>
+                <h5 class="modal-title">Edit IP & Lokasi</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
             </div>
             <!-- Isi modal body -->

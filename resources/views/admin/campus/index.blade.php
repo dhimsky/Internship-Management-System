@@ -107,7 +107,7 @@
                 @method('POST')
                 <div class="form-group mb-3">
                     <label class="required-label faded-label" for="name" >Nama Kampus</label>
-                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" placeholder="Masukan Divisi">
+                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" placeholder="Masukan Kampus">
                     @error('name')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -128,7 +128,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Admin</h5>
+                <h5 class="modal-title">Edit Kampus</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
             </div>
             <!-- Isi modal body -->
@@ -138,8 +138,8 @@
                     @csrf
                     @method('PUT')
                     <div class="form-group mb-3">
-                        <label class="required-label faded-label" for="name">Divisi</label>
-                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $campus->name }}" placeholder="Masukkan Divisi">
+                        <label class="required-label faded-label" for="name">Nama Kampus</label>
+                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $campus->name }}" placeholder="Masukkan Kampus">
                         @error('name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

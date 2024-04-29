@@ -17,7 +17,8 @@ class CreateLeavesTable extends Migration
             $table->id();
             $table->bigInteger('employee_id');
             $table->string('reason');
-            $table->text('description');
+            $table->string('evidence')->nullable();
+            $table->text('description')->nullable();
             $table->string('half_day');
             $table->dateTime('start_date');
             $table->dateTime('end_date')->nullable();

@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">Daftar Absensi</h1>
+                    <h1 class="m-0 text-dark">Riwayat Absensi</h1>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-6">
@@ -15,7 +15,7 @@
                             <a href="{{ route('employee.index') }}">Dashboard Karyawan</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            Daftar Absensi
+                            Riwayat Absensi
                         </li>
                     </ol>
                 </div>
@@ -106,104 +106,81 @@
                                 <thead>
                                     <tr class="text-center">
                                         <th>#</th>
-                                        <th>Tanggal</th>
-                                        <th>Status</th>
-                                        <th>Waktu Absensi</th>
-                                        {{-- <th>Lokasi Absensi</th> --}}
-                                        <th>Waktu Selesai</th>
-                                        {{-- <th>Lokasi Selesai</th>
-                                        <th>Ip Masuk</th> --}}
-                                        <th>Status Masuk</th>
-                                        <th>Status Keluar</th>
+                                        <th>Tanggal Absen</th>
+                                        <th>Status Absen</th>
+                                        <th>Keterangan Absen</th>
                                         <th class="none">Laporan Harian</th>
+                                        <th class="none">Riwayat Awal Absensi</th>
+                                        <th class="none">Riwayat Akhir Absensi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($attendances as $index => $attendance)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
-                                        @if ($attendance->registered == 'yes')
-                                        <td>{{ $attendance->created_at->format('d-m-Y') }}</td>
-                                        <td><h5 class="text-center"><span class="badge badge-pill badge-success">Hadir</span> </h5></td>
-                                        <td class="text-center">{{ $attendance->created_at->format('H:i:s') }}</td>
-                                        {{-- <td>{{ $attendance->entry_location }}</td> --}}
-                                        <td class="text-center">{{ $attendance->updated_at->format('H:i:s') }}</td>
-                                        {{-- <td>{{ $attendance->exit_location }}</td> --}}
-                                        {{-- <td>{{ $attendance->entry_ip }}</td> --}}
-                                        <td class="text-center">
-                                            <span class="badge {{ $attendance->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">
-                                                {{ $attendance->entry_status }}
-                                            </span>
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="badge {{ $attendance->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">
-                                                {{ $attendance->exit_status }}
-                                            </span>
-                                        </td>
-                                        <td>{{ $attendance->daily_report }}</td>
-                                        @elseif($attendance->registered == 'no')
-                                        <td>{{ $attendance->created_at->format('d-m-Y') }}</td>
-                                        <td><h5 class="text-center"><span class="badge badge-pill badge-danger">Absen</span> </h5></td>
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        {{-- <td class="text-center">Belum Ada Riwayat</td> --}}
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        {{-- <td class="text-center">Belum Ada Riwayat</td>
-                                        <td class="text-center">Belum Ada Riwayat</td> --}}
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        @elseif($attendance->registered == 'sun')
-                                        <td>{{ $attendance->created_at->format('d-m-Y') }}</td>
-                                        <td><h5 class="text-center"><span class="badge badge-pill badge-info">Minggu</span> </h5></td>
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        {{-- <td class="text-center">Belum Ada Riwayat</td> --}}
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        {{-- <td class="text-center">Belum Ada Riwayat</td>
-                                        <td class="text-center">Belum Ada Riwayat</td> --}}
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        @elseif($attendance->registered == 'leave')
-                                        <td>{{ $attendance->created_at->format('d-m-Y') }}</td>
-                                        <td><h5 class="text-center"><span class="badge badge-pill badge-info">Leave</span> </h5></td>
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        {{-- <td class="text-center">Belum Ada Riwayat</td> --}}
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        {{-- <td class="text-center">Belum Ada Riwayat</td>
-                                        <td class="text-center">Belum Ada Riwayat</td> --}}
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        @elseif($attendance->registered == 'holiday')
-                                        <td>{{ $attendance->created_at->format('d-m-Y') }}</td>
-                                        <td><h5 class="text-center"><span class="badge badge-pill badge-success">Hari Libur</span> </h5></td>
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        {{-- <td class="text-center">Belum Ada Riwayat</td> --}}
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        {{-- <td class="text-center">Belum Ada Riwayat</td>
-                                        <td class="text-center">Belum Ada Riwayat</td> --}}
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        <td class="text-center">Belum Ada Riwayat</td>
-                                        @else
-                                        <td>{{ $attendance->created_at->format('d-m-Y') }}</td>
-                                        <td><h5 class="text-center"><span class="badge badge-pill badge-warning">Setengah Jam Kerja</span> </h5></td>
-                                        <td class="text-center">{{ $attendance->created_at->format('H:i:s') }}</td>
-                                        {{-- <td>{{ $attendance->entry_location }}</td> --}}
-                                        <td class="text-center"> - </td>
-                                        {{-- <td> - </td>
-                                        <td>{{ $attendance->entry_ip }}</td> --}}
-                                        <td class="text-center">
-                                            <span class="badge {{ $attendance->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">
-                                                {{ $attendance->entry_status }}
-                                            </span>
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="badge {{ $attendance->exit_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">
-                                                {{ $attendance->exit_status }}
-                                            </span>
-                                        </td>
-                                        <td>{{ $attendance->daily_report }}</td>
+                                        @if ($attendance)
+                                            @if ($attendance->registered == 'hadir')
+                                            <td>{{ $attendance->created_at->format('d M Y') }}</td>
+                                            <td><h5 class="text-center"><span class="badge badge-pill badge-success">Hadir</span> </h5></td>
+                                            <?php if($attendance->time>=7 && $attendance->time<=9) { ?>
+                                                <td><h6 class="text-center"><span class="badge badge-pill badge-success">Hadir Tepat Waktu</span></h6></td>
+                                            <?php } elseif ($attendance->time>9 && $attendance->time<=15) {
+                                                ?><td><h6 class="text-center"><span class="badge badge-pill badge-warning">Hadir Terlambat</span></h6></td><?php
+                                            } else {
+                                                ?><td><h6 class="text-center"><span class="badge badge-pill badge-danger">Absensi Tidak Valid</span></h6></td><?php 
+                                            } ?>
+                                            <td>{{ $attendance->daily_report }}</td>
+                                            <td>
+                                                Terekam sejak {{ $attendance->created_at->format('H:i:s') }} dari {{ $attendance->entry_location}} dengan alamat IP {{ $attendance->entry_ip}} <span class="badge {{ $attendance->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
+                                                    {{ $attendance->entry_status }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                Terekam sejak {{ $attendance->updated_at->format('H:i:s') }} dari {{ $attendance->exit_location}} dengan alamat IP {{ $attendance->exit_ip}} <span class="badge {{ $attendance->exit_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
+                                                    {{ $attendance->exit_status }}
+                                                </span>
+                                            </td>
+                                            @elseif ($attendance->registered === null)
+                                            <td>{{ $attendance->created_at->format('d M Y') }}</td>
+                                            <td><h5 class="text-center"><span class="badge badge-pill badge-warning">Setengah Jam Kerja</span> </h5></td>
+                                            <?php if($attendance->time>=7 && $attendance->time<=9) { ?>
+                                                <td><h6 class="text-center"><span class="badge badge-pill badge-success">Hadir Tepat Waktu</span></h6></td>
+                                            <?php } elseif ($attendance->time>9 && $attendance->time<=15) {
+                                                ?><td><h6 class="text-center"><span class="badge badge-pill badge-warning">Hadir Terlambat</span></h6></td><?php
+                                            } else {
+                                                ?><td><h6 class="text-center"><span class="badge badge-pill badge-danger">Absensi Tidak Valid</span></h6></td><?php 
+                                            } ?>
+                                            <td>Belum Ada Riwayat</td>
+                                            <td>
+                                                Terekam sejak {{ $attendance->created_at->format('H:i:s') }} dari {{ $attendance->entry_location}} dengan alamat IP {{ $attendance->entry_ip}} <span class="badge {{ $attendance->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
+                                                    {{ $attendance->entry_status }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                Belum Ada Riwayat
+                                            </td>
+                                            @elseif ($attendance->registered == 'Sakit')
+                                            <td>{{ $attendance->created_at->format('d M Y') }}</td>
+                                            <td><h5 class="text-center"><span class="badge badge-pill badge-info">Izin/Sakit</span> </h5></td>
+                                            <td><h6 class="text-center"><span class="badge badge-pill badge-info">Belum Ada Riwayat</span></h6></td>
+                                            <td class="text-center">Belum Ada Riwayat</td>
+                                            <td class="text-center">Belum Ada Riwayat</td>
+                                            <td class="text-center">Belum Ada Riwayat</td>
+                                            @elseif ($attendance->registered == 'Cuti')
+                                            <td>{{ $attendance->created_at->format('d M Y') }}</td>
+                                            <td><h5 class="text-center"><span class="badge badge-pill badge-info">Cuti</span> </h5></td>
+                                            <td><h6 class="text-center"><span class="badge badge-pill badge-info">Belum Ada Riwayat</span></h6></td>
+                                            <td class="text-center">Belum Ada Riwayat</td>
+                                            <td class="text-center">Belum Ada Riwayat</td>
+                                            <td class="text-center">Belum Ada Riwayat</td>
+                                            @else
+                                            <td><h6 class="text-center"><span class="badge badge-pill badge-info">Belum Ada Riwayat</span></h6></td>
+                                            <td><h6 class="text-center"><span class="badge badge-pill badge-info">Belum Ada Riwayat</span></h6></td>
+                                            <td><h6 class="text-center"><span class="badge badge-pill badge-info">Belum Ada Riwayat</span></h6></td>
+                                            <td class="text-center">Belum Ada Riwayat</td>
+                                            <td class="text-center">Belum Ada Riwayat</td>
+                                            <td class="text-center">Belum Ada Riwayat</td>
+                                            @endif
                                         @endif
                                     </tr>
                                 @endforeach

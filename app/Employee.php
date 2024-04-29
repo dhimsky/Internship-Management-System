@@ -11,7 +11,7 @@ class Employee extends Model
     protected $table = 'employees';
     protected $primaryKey = 'id';
     protected $dates = ['created_at', 'updated_at', 'intern_period'];
-    protected $fillable = ['user_id', 'name', 'age', 'campus_id', 'division_id', 'intern_period'];
+    protected $fillable = ['user_id', 'name', 'age', 'campus_id', 'division_id', 'start_date', 'end_date'];
     
     public function user() {
         return $this->belongsTo('App\User');

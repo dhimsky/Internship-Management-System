@@ -31,23 +31,18 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-4 mx-auto">
+                <div class="col-md-6 mx-auto">
                     <!-- general form elements -->
                     <div class="card card-primary">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                Ajukan Cuti
-                            </h3>
-                        </div>
                         @include('messages.alerts')
-                        <form action="{{ route('employee.leaves.store', $employee->id) }}" method="POST">
+                        <form action="{{ route('employee.leaves.store', $employee->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="">Alasan</label>
                                     <!-- <input type="text" name="reason" value="{{ old('reason') }}" class="form-control"> -->
                                     <select class="form-control" name="reason">
-                                        <option value="Sakit" selected>Sakit</option>
+                                        <option value="Sakit" selected>Izin/Sakit</option>
                                         <option value="Cuti">Cuti</option>
                                     </select>
                                     @error('reason')
@@ -57,7 +52,16 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="">Deskripsi</label>
+                                    <label for="">File Bukti</label>
+                                    <input type="file" name="evidence" class="custom-file @error('file') is-invalid @enderror" accept="application/pdf">
+                                    @error('evidence')
+                                    <div class="text-danger">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Keterangan</label>
                                     <textarea name="description" class="form-control" >{{ old('description') }}</textarea>
                                     @error('description')
                                     <div class="text-danger">
@@ -66,7 +70,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label>Lebih dari Sehari ?</label>
+                                    <label>Lebih dari Sehari?</label>
                                     <select class="form-control" name="multiple-days" onchange="showDate()">
                                         <option value="yes" selected>Ya</option>
                                         <option value="no">Tidak</option>

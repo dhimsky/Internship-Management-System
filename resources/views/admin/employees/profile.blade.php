@@ -65,8 +65,12 @@
                                 <td>{{ $employee->division->name }}</td>
                             </tr>
                             <tr>
-                                <td>Periode Magang</td>
-                                <td>{{ $employee->intern_period->format('d M, Y') }}</td>
+                                <td>Tanggal Mulai Magang</td>
+                                <td>{{ $employee->start_date }}</td>
+                            </tr>
+                            <tr>
+                                <td>Tanggal Selesai Magang</td>
+                                <td>{{ $employee->end_date }}</td>
                             </tr>
                         </table>
                     </div>
@@ -80,8 +84,4 @@
     </div>
     <!-- /.container-fluid -->
 </section>
-<!-- /.content -->
-
-<!-- /.content-wrapper -->
-
 @endsection

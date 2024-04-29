@@ -85,7 +85,7 @@ class AttendanceController extends Controller
         $attendance = new Attendance([
             'employee_id' => $employee_id,
             'entry_ip' => $request->ip(),
-            'time' => date('h'),
+            'time' => date('H'),
             'entry_location' => $request->entry_location,
             'entry_status' => $entry_status,
         ]);
@@ -120,7 +120,7 @@ class AttendanceController extends Controller
 
         $attendance->exit_ip = $request->ip();
         $attendance->exit_location = $request->exit_location;
-        $attendance->registered = 'yes';
+        $attendance->registered = 'hadir';
         $attendance->exit_status = $exit_status;
         $attendance->daily_report = $request->daily_report;
         $attendance->save();

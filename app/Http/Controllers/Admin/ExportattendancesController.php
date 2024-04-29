@@ -16,28 +16,21 @@ class ExportattendancesController extends Controller
         $date = $request->input('date');
 
         if ($date) {
-            // Jika tanggal disediakan, filter data berdasarkan tanggal
             $attendances = Attendance::whereDate('created_at', Carbon::createFromFormat('Y-m-d', $date))->get();
         } else {
-            // Jika tanggal tidak disediakan, ambil semua data attendance
             $attendances = Attendance::all();
         }
 
-        // Load the HTML view
         $html = view('admin.employees.exportattendances', compact('attendances','date'));
 
-        // Create Dompdf instance
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $pdf = new Dompdf($options);
 
-        // Load HTML content
         $pdf->loadHtml($html);
 
-        // Render PDF (optional settings)
-        $pdf->setPaper('A4', 'portrait');
+        $pdf->setPaper('A4', 'landscape');
 
-        // Output the generated PDF to the browser
         $pdf->render();
         return $pdf->stream('attendance.pdf');
     }

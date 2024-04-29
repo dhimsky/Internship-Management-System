@@ -8,6 +8,7 @@ use App\WeeklyReports;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class WeeklyReportsController extends Controller
 {
@@ -22,7 +23,6 @@ class WeeklyReportsController extends Controller
             'tittle' => 'required',
             'file' => 'required|file|mimes:pdf|max:2048',
             'value' => 'nullable',
-            'status' => 'nullable',
         ],[
             'tittle.required' => 'Judul wajib diisi!',
             'file.required' => 'Wajib upload file!',
@@ -31,17 +31,18 @@ class WeeklyReportsController extends Controller
         ]);
     
         $employee = Auth::user()->employee;
-    
+
         $reportData = [
             'employee_id' => $employee->id,
-            'status' => 'Pending',
             'tittle' => $request->tittle,
             'value' => null,
         ];
     
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $fileName = time() . '_' . $file->getClientOriginalName();
+            $currentDate = Carbon::now()->format('Y-m-d');
+            $originalFileName = $file->getClientOriginalName();
+            $fileName = "{$currentDate}_{$originalFileName}.pdf";
             Storage::putFileAs('public/pdf_reports', $file, $fileName);
             $reportData['file'] = $fileName;
         }
@@ -51,6 +52,19 @@ class WeeklyReportsController extends Controller
         Alert::success('Success', 'Laporan mingguan berhasil dibuat!');
         return redirect()->route('employee.weeklyreports.index');
     }
+
+    public function destroy($id)
+    {
+        $weeklyReport = WeeklyReports::findOrFail($id);
+        if ($weeklyReport->file) {
+            Storage::delete('public/pdf_reports/' . $weeklyReport->file);
+        }
+        $weeklyReport->delete();
+        Alert::success('Success', 'Laporan mingguan berhasil dihapus!');
+
+        return redirect()->route('employee.weeklyreports.index');
+    }
+
 
     public function download($fileName)
     {

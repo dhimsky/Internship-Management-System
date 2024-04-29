@@ -4,7 +4,7 @@
         <p>
             Magang
             <i class="fas fa-angle-left right"></i>
-            <span class="badge badge-info right">2</span>
+            <span class="badge badge-info right">3</span>
         </p>
     </a>
     <ul class="nav nav-treeview">
@@ -26,13 +26,21 @@
                 <p>Absensi Magang</p>
             </a>
         </li>
+        <li class="nav-item">
+            <a
+                href="{{ route('admin.employees.weeklyreports') }}"
+                class="nav-link">
+                <i class="far fa-file nav-icon"></i>
+                <p>Laporan Mingguan</p>
+            </a>
+        </li>
     </ul>
 </li>
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">
         <i class="nav-icon fa fa-calendar-times-o"></i>
         <p>
-            Daftar Cuti Karyawan
+            Daftar Cuti Magang
             <i class="fas fa-angle-left right"></i>
             <span class="badge badge-info right">1</span>
         </p>
@@ -47,15 +55,6 @@
                 <p>Cuti</p>
             </a>
         </li>
-        <!-- <li class="nav-item">
-            <a
-                href="{{ route('admin.expenses.index') }}"
-                class="nav-link"
-            >
-                <i class="far fa-circle nav-icon"></i>
-                <p>Expenses</p>
-            </a>
-        </li> -->
     </ul>
 </li>
 <li class="nav-item has-treeview">
@@ -96,33 +95,3 @@
         </li>
     </ul>
 </li>
-<!-- <li class="nav-item has-treeview">
-    <a href="#" class="nav-link">
-        <i class="nav-icon fa fa-calendar-minus-o"></i>
-        <p>
-            Hari Libur
-            <i class="fas fa-angle-left right"></i>
-            <span class="badge badge-info right">2</span>
-        </p>
-    </a>
-    <ul class="nav nav-treeview">
-        <li class="nav-item">
-            <a
-                href="{{ route('admin.holidays.create') }}"
-                class="nav-link"
-            >
-                <i class="far fa-circle nav-icon"></i>
-                <p>Tambah Hari Libur</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a
-                href="{{ route('admin.holidays.index') }}"
-                class="nav-link"
-            >
-                <i class="far fa-circle nav-icon"></i>
-                <p>Daftar Hari Libur</p>
-            </a>
-        </li>
-    </ul>
-</li> -->

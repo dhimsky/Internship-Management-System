@@ -38,7 +38,8 @@
                                     <th>Umur</th>
                                     <th>Asal Kampus</th>
                                     <th>Divisi</th>
-                                    <th>Periode Magang</th>
+                                    <th>Mulai Magang</th>
+                                    <th>Akhir Magang</th>
                                     <th class="none">Aksi</th>
                                 </tr>
                             </thead>
@@ -50,7 +51,8 @@
                                     <td class="text-center">{{ $employee->age }}</td>
                                     <td class="text-center">{{ $employee->campus->name }}</td>
                                     <td class="text-center">{{ $employee->division->name }}</td>
-                                    <td class="text-center">{{ $employee->intern_period->format('d M, Y') }}</td>
+                                    <td class="text-center">{{ $employee->start_date }}</td>
+                                    <td class="text-center">{{ $employee->end_date }}</td>
                                     <td>
                                         <a href="{{ route('admin.employees.profile', $employee->id) }}" class="btn btn-info">Lihat Profil</a>
                                         <a href="" class="btn btn-warning" data-toggle="modal" data-target=".editEmployee{{ $employee->id }}" title="Edit Employee">Edit</a>
@@ -140,12 +142,21 @@
                         @enderror
                     </div>
                     <div class="form-group mb-3">
-                        <label class="required-label faded-label" for="intern_period" >Periode Magang</label>
-                        <input type="text" name="intern_period" id="intern_period" class="form-control @error('intern_period') is-invalid @enderror" value="{{ old('intern_period') }}" placeholder="Masukan akhir magang">
-                        @error('intern_period')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
+                        <label class="required-label faded-label" for="start_date">Tanggal Mulai Magang</label>
+                        <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="Masukkan Tanggal Mulai Magang">
+                        @error('start_date')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="required-label faded-label" for="end_date">Tanggal Selesai Magang</label>
+                        <input type="date" name="end_date" id="end_date" class="form-control @error('end_date') is-invalid @enderror" placeholder="Masukkan Tanggal Selesai Magang">
+                        @error('end_date')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                         @enderror
                     </div>
                     <div class="form-group">
@@ -241,9 +252,18 @@
                         @enderror
                     </div>
                     <div class="form-group mb-3">
-                        <label class="required-label faded-label" for="intern_period">Periode Magang</label>
-                        <input type="text" name="intern_period" id="intern_period" class="form-control @error('intern_period') is-invalid @enderror" value="{{ $employee->intern_period }}" placeholder="Masukkan Periode Magang">
-                        @error('intern_period')
+                        <label class="required-label faded-label" for="start_date">Tanggal Mulai Magang</label>
+                        <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" value="{{ $employee->start_date }}" placeholder="Masukkan Periode Magang">
+                        @error('start_date')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="required-label faded-label" for="end_date">Tanggal Selesai Magang</label>
+                        <input type="date" name="end_date" id="end_date" class="form-control @error('end_date') is-invalid @enderror" value="{{ $employee->end_date }}" placeholder="Masukkan Periode Magang">
+                        @error('end_date')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -347,5 +367,5 @@
     $(function () {
         $('[data-toggle="popover"]').popover()
     })
-    </script>
+</script>
 @endsection

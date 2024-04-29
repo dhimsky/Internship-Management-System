@@ -20,7 +20,8 @@ class CreateEmployeesTable extends Migration
             $table->string('age');
             $table->bigInteger('campus_id');
             $table->bigInteger('division_id');
-            $table->date('intern_period');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->string('photo')->nullable();
             $table->timestamps();
         });

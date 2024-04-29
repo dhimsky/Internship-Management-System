@@ -13,13 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('weeklyreports', function (Blueprint $table) {
+        Schema::create('holidays', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('employee_id');
-            $table->string('tittle');
-            $table->string('file');
-            $table->string('status');
-            $table->string('value')->nullable();
+            $table->string('name');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('weeklyreports');
+        Schema::dropIfExists('holidays');
     }
 };

@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class LeaveController extends Controller
@@ -31,35 +32,90 @@ class LeaveController extends Controller
     }
 
     public function store(Request $request, $employee_id) {
-        $red=route('employee.leaves.create');
-        $cb = $request->input('date');
-        $cb2 = strtotime("+3 Days");
-        $cb3 = date("d",$cb2);
-        $cb4 = date('d',(strtotime ( '-1 day' , strtotime ($cb))));
-            //$start = $request->input('start_date');
-            [$start, $end] = explode(' - ', $request->input('date_range'));
-            $start = Carbon::parse($start);
-            $end = Carbon::parse($end);
-            $str=date('d',strtotime($start));
-        if($request->input('reason')=="Sakit" && ($cb3<=date('d', strtotime($cb)) || $cb3<=$str || $cb<date('d') || $str<date('d'))) {
-            echo'<script>alert("'.$str.' Izin Sakit hanya bisa diajukan maksimal H+3 sejak tanggal ketidakhadiran");window.location="'.$red.'";</script>';
+            $reason = $request->input('reason');
+
+            if ($reason === "Sakit") {
+            if ($request->has('date')) {
+                $chosenDate = Carbon::parse($request->input('date'));
+                $currentDate = Carbon::now(); // Mendapatkan tanggal sekarang
+                $daysDifference = $currentDate->diffInDays($chosenDate); // Menghitung selisih hari
+            
+                if ($daysDifference > 3) {
+                    // Jika lebih dari 3 hari, tampilkan pesan info dan kembalikan ke halaman sebelumnya
+                    Alert::info('Info', 'Izin Sakit hanya bisa diajukan maksimal H+3 sejak tanggal ketidakhadiran');
+                    return back();
+                }
+            } else {
+                Alert::error('Error', 'Tanggal tidak valid.');
+                return back();
+            }
+            if ($request->has('date_range')) {
+                [$start, $end] = explode(' - ', $request->input('date_range'));
+                $chosenDate = Carbon::parse($start);
+
+                $currentDate = Carbon::now(); // Mendapatkan tanggal sekarang
+                $daysDifference = $currentDate->diffInDays($chosenDate); // Menghitung selisih hari
+            
+                if ($daysDifference > 3) {
+                    // Jika lebih dari 3 hari, tampilkan pesan info dan kembalikan ke halaman sebelumnya
+                    Alert::info('Info', 'Izin Sakit hanya bisa diajukan maksimal H+3 sejak tanggal ketidakhadiran');
+                    return back();
+                }
+            }else {
+                Alert::error('Error', 'Tanggal tidak valid.');
+                return back();
+            }
         }
-        else if($request->input('reason')=="Cuti" && (date('d', strtotime($cb)>=$cb4 || $str>=$cb4 || $cb>date('d') || $str>date('d')))) {
-            echo'<script>alert("Izin Cuti hanya bisa diajukan maksimal H-1 sejak tanggal ketidakhadiran");window.location="'.$red.'";</script>';
-        } else {
+        
+        if ($reason === "Cuti") {
+            $chosenDate = null;
+        
+            if ($request->has('date_range')) {
+                [$start, $end] = explode(' - ', $request->input('date_range'));
+                $chosenDate = Carbon::parse($start);
+            } elseif ($request->has('date')) {
+                $chosenDate = Carbon::parse($request->input('date'));
+            }
+                
+            if (!$chosenDate) {
+                // Tampilkan pesan error jika tanggal tidak valid
+                Alert::error('Error', 'Tanggal tidak valid.');
+                return back();
+            }
+        
+            $currentDate = Carbon::now();
+        
+            // Periksa apakah chosenDate sama atau sebelum tanggal sekarang
+            if ($chosenDate->isSameDay($currentDate) || $chosenDate->isBefore($currentDate)) {
+                // Tampilkan pesan info jika chosenDate adalah tanggal sekarang atau sebelumnya
+                Alert::info('Info', 'Izin Cuti harus diajukan minimal 1 hari sebelum tanggal cuti dan tanggal cuti harus lebih dari hari ini.');
+                return back();
+            }
+        }
+
         $data = [
             'employee' => Auth::user()->employee
         ];
         if($request->input('multiple-days') == 'yes') {
             $this->validate($request, [
                 'reason' => 'required',
-                'description' => 'required',
+                'description' => 'nullable',
+                'evidence' => 'required|file|mimes:pdf|max:2048',
                 'date_range' => new DateRange
+            ],[
+                'evidence.required' => 'Wjib upload bukti!',
+                'evidence.mimes' => 'Wjib format PDF!',
+                'evidence.max' => 'File maksimal 2MB!',
             ]);
         } else {
             $this->validate($request, [
                 'reason' => 'required',
-                'description' => 'required'
+                'description' => 'nullable',
+                'evidence' => 'required|file|mimes:pdf|max:2048',
+            ],[
+                'evidence.required' => 'Wjib upload bukti!',
+                'evidence.mimes' => 'Wjib format PDF!',
+                'evidence.max' => 'File maksimal 2MB!',
             ]);
         }
         
@@ -69,6 +125,14 @@ class LeaveController extends Controller
             'description' => $request->input('description'),
             'half_day' => $request->input('half-day')
         ];
+        if ($request->hasFile('evidence')) {
+            $file = $request->file('evidence');
+            $currentDate = Carbon::now()->format('Y-m-d');
+            $originalFileName = $file->getClientOriginalName();
+            $fileName = "{$currentDate}_{$originalFileName}.pdf";
+            Storage::putFileAs('public/evidence_file', $file, $fileName);
+            $values['evidence'] = $fileName;
+        }
         if($request->input('multiple-days') == 'yes') {
             [$start, $end] = explode(' - ', $request->input('date_range'));
             $values['start_date'] = Carbon::parse($start);
@@ -77,9 +141,8 @@ class LeaveController extends Controller
             $values['start_date'] = Carbon::parse($request->input('date'));
         }
         Leave::create($values);
-
         Alert::success('Success', 'Pengajuan Cuti Anda berhasil, tunggu persetujuan atasan.');
-        return redirect()->route('employee.leaves.create')->with($data); }
+        return redirect()->route('employee.leaves.create')->with($data); 
     }
 
     public function edit($leave_id) {
@@ -122,8 +185,11 @@ class LeaveController extends Controller
         return redirect()->route('employee.leaves.index');
     }
 
-    public function destroy($leave_id) {
-        $leave = Leave::findOrFail($leave_id);
+    public function destroy($id) {
+        $leave = Leave::findOrFail($id);
+        if ($leave->evidence) {
+            Storage::delete('public/evidence_file/' . $leave->evidence);
+        }
         Gate::authorize('employee-leaves-access', $leave);
         $leave->delete();
 
