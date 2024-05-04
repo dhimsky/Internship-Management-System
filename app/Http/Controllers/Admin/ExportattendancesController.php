@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Response;
 
 class ExportattendancesController extends Controller
 {
@@ -28,10 +29,16 @@ class ExportattendancesController extends Controller
         $pdf = new Dompdf($options);
 
         $pdf->loadHtml($html);
-
         $pdf->setPaper('A4', 'landscape');
-
         $pdf->render();
-        return $pdf->stream('attendance.pdf');
+
+       $pdfOutput = $pdf->output(); // Mengambil output PDF sebagai string
+
+        // Atur header untuk respons PDF
+        $response = Response::make($pdfOutput);
+        $response->header('Content-Type', 'application/pdf');
+        $response->header('Content-Disposition', 'inline; filename=attendance.pdf'); // inline untuk membuka di jendela baru
+
+        return $response;
     }
 }

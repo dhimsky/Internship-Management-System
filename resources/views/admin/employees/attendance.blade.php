@@ -212,7 +212,7 @@
                     </button>
                 </div>
             <div class="modal-body">
-                <form name="pdfForm" action="{{ route('admin.attendance.download') }}" method="GET">
+                <form name="pdfForm" action="{{ route('admin.attendance.download') }}" target="_blank" method="GET">
                     <div class="card-body">
                         <div class="input-group mx-auto" style="width:100%">
                             <span class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></span>

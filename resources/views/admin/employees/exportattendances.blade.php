@@ -43,8 +43,8 @@
                 <th>Waktu Keluar</th>
                 <th>Lokasi Keluar</th>
                 <th>Validasi Masuk</th>
-                <th>Riwayat Database</th>
-                <th>Riwayat Absensi</th>
+                <th>Status Absensi</th>
+                <th>Keterangan Absensi</th>
                 <th>Laporan Harian</th>
             </tr>
         </thead>
@@ -62,7 +62,7 @@
                 <td>{{ $attendance->employee->updated_at }}</td>
                 <td>{{ $attendance->exit_location }}</td>
                 <td>{{ $attendance->exit_status }}</td>
-                    <td><span style="font-family: Arial, Helvetica, sans-serif">Terekam</span></td>
+                <td><span style="font-family: Arial, Helvetica, sans-serif">{{ $attendance->registered }}</span></td>
                     <?php if($attendance->time>=7 && $attendance->time<=9) { ?>
                         <td><span style="font-family: Arial, Helvetica, sans-serif">Hadir Tepat Waktu</span></td>
                     <?php } elseif ($attendance->time>9 && $attendance->time<=15) {

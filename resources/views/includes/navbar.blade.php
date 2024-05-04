@@ -33,7 +33,9 @@
                 <p>
                     {{ Auth::user()->name }}
                     @if ( Auth::user()->employee )
-                    <br> {{ Auth::user()->employee->division->name }} 
+                    <br><small>Divisi {{ Auth::user()->employee->division->name }}</small>
+                    @else
+                    <br><small>Admin</small> 
                     @endif 
                 </p>
                 </li>

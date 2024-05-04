@@ -106,4 +106,30 @@ private function deleteDirectory($dir)
             rmdir($dir);
         }
     }
+
+    public function update(Request $request, $id){
+        $this->validate($request, [
+            'value' => 'required',
+        ],[
+            'value.required' => 'Nilai wajib diisi!',
+        ]);
+        $weeklyreport = WeeklyReports::find($id);
+        $weeklyreport->value = $request->value;
+        $weeklyreport->save();
+
+        Alert::success('success', 'Berhasil memberikan nilai.');
+        return redirect()->route('admin.employees.weeklyreports');
+    }
+
+    public function destroy($id)
+    {
+        $weeklyReport = WeeklyReports::findOrFail($id);
+        if ($weeklyReport->file) {
+            Storage::delete('public/pdf_reports/' . $weeklyReport->file);
+        }
+        $weeklyReport->delete();
+        Alert::success('Success', 'Laporan mingguan berhasil dihapus!');
+
+        return redirect()->route('admin.employees.weeklyreports');
+    }
 }

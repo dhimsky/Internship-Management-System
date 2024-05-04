@@ -81,7 +81,7 @@
                                                     </form>
                                                 </div>
                                                 <div class="card-footer text-center">
-                                                    <small>Aksi ini tidak bisa dilakukan</small>
+                                                    <small>Pastikan data yang anda pilih benar</small>
                                                 </div>
                                             </div>
                                         </div>

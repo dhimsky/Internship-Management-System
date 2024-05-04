@@ -67,6 +67,8 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware(['auth','
     Route::put('/leaves/{leave_id}', 'LeaveController@update')->name('leaves.update');
     // Rote for Weekly Reports //
     Route::get('/employees/weeklyreports', 'WeeklyReportsController@index')->name('employees.weeklyreports');
+    Route::put('/emplotees/weeklyreports/{id}', 'WeeklyReportsController@update')->name('employees.weeklyreports.update');
+    Route::delete('/employees/weeklyreports/{id}', 'WeeklyReportsController@destroy')->name('employees.weeklyreports.delete');
     Route::get('/employees/weeklyreports/download/{filenName}', 'WeeklyReportsController@download')->name('employees.weeklyreports.download');
     Route::get('/employees/weeklyreports/filter', 'WeeklyReportsController@downloadWeeklyReports')->name('employees.weeklyreports.filter');
 });
