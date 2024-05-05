@@ -28,21 +28,44 @@ class AttendanceController extends Controller
             }
         }
     }
-    public function location(Request $request) {
-        
-        $response = Http::get('https://nominatim.openstreetmap.org/reverse?format=geojson&lat='.$request->lat.'&lon='.$request->lon);
-        // dd();
-        // $result = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' . $request->lat . ',' . $request->lon . '&key=AIzaSyC_spXZlR87VF9qq073nAhFGZ-f3K6enqk';
-        // $file_contents = file_get_contents($result);
 
-        // $json_decode = json_decode($file_contents);
-        // echo  $json_decode->results[0]->formatted_address;
-        // $response = array(
-        //     'status' => 'success',
-        //     'result' => $json_decode
-        // );
-        return $response->json()['features'][0]['properties']['display_name'];
-    }
+    public function location(Request $request)
+{
+    $response = Http::get('https://nominatim.openstreetmap.org/reverse', [
+        'format' => 'geojson',
+        'lat' => $request->lat,
+        'lon' => $request->lon,
+    ]);
+
+    $properties = $response->json()['features'][0]['properties'];
+
+    // Ambil informasi yang ingin Anda tampilkan (misalnya nama desa, kecamatan, kabupaten/negara)
+    $address = [
+        'village' => $properties['address']['village'] ?? '',
+        'town' => $properties['address']['town'] ?? '',
+        'county' => $properties['address']['county'] ?? '',
+        'country' => $properties['address']['country'] ?? '',
+    ];
+
+    return implode(', ', array_filter($address)); // Gabungkan dan kembalikan informasi yang terkumpul
+}
+
+
+    // public function location(Request $request) {
+        
+    //     $response = Http::get('https://nominatim.openstreetmap.org/reverse?format=geojson&lat='.$request->lat.'&lon='.$request->lon);
+    //     // dd();
+    //     // $result = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' . $request->lat . ',' . $request->lon . '&key=AIzaSyC_spXZlR87VF9qq073nAhFGZ-f3K6enqk';
+    //     // $file_contents = file_get_contents($result);
+
+    //     // $json_decode = json_decode($file_contents);
+    //     // echo  $json_decode->results[0]->formatted_address;
+    //     // $response = array(
+    //     //     'status' => 'success',
+    //     //     'result' => $json_decode
+    //     // );
+    //     return $response->json()['features'][0]['properties']['display_name'];
+    // }
 
     // Opens view for attendance register form
     public function create() {
@@ -101,8 +124,8 @@ class AttendanceController extends Controller
     // Hapus data record absensi
     public function update(Request $request, $attendance_id) {
         $attendance = Attendance::findOrFail($attendance_id);
-        $entry_ip = $request->ip();
-        $entry_location = $request->entry_location;
+        $exit_ip = $request->ip();
+        $exit_location = $request->exit_location;
 
         // Ambil daftar IP dan lokasi yang diizinkan dari tabel LocationAttendance
         $allowedLocations = StatusAtten::all(); // Ambil semua data lokasi
@@ -112,7 +135,7 @@ class AttendanceController extends Controller
 
         // Periksa kecocokan IP dan/atau lokasi dengan data di tabel LocationAttendance
         foreach ($allowedLocations as $location) {
-            if ($entry_ip === $location->ip || $entry_location === $location->location) {
+            if ($exit_ip === $location->ip || $exit_location === $location->location) {
                 $exit_status = 'Valid';
                 break; // Keluar dari loop jika sudah ada kecocokan
             }

@@ -58,7 +58,7 @@
                 </div>
             </div>
         </section>
-               @include('sweetalert::alert')
+        @include('sweetalert::alert')
         @if ($errors->any())
             <script>
                 var errorMessages = [];

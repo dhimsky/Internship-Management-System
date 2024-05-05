@@ -268,27 +268,6 @@
 
 @section('extra-js')
 <script>
-// var x = document.getElementById("demo");
-// if('geolocation' in navigator) {
-//     console.log('gl available');
-//     navigator.geolocation.getCurrentPosition(position => {
-//         console.log('sda');
-//     })
-// }
-// function getLocation() {
-//     if (navigator.geolocation) {
-//         console.log('getting location')
-//         navigator.geolocation.getCurrentPosition(showPosition);
-//     } else { 
-//         x.innerHTML = "Geolocation is not supported by this browser.";
-//     }
-// }
-
-// function showPosition(position) {
-//     x.innerHTML = "Latitude: " + position.coords.latitude + 
-//     "<br>Longitude: " + position.coords.longitude;
-// }
-// /attendance/get-location
 $(document).ready(function() {
     if ("geolocation" in navigator) {
         console.log("gl available");
