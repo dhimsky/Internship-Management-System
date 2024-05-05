@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 29, 2024 at 04:17 AM
+-- Generation Time: May 05, 2024 at 07:07 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.2.8
 
@@ -61,9 +61,9 @@ CREATE TABLE `campus` (
 --
 
 INSERT INTO `campus` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'Universitas Indonesia', '2024-04-29 04:02:01', '2024-04-29 04:02:01'),
-(2, 'Institute Technology Bandung', '2024-04-29 04:02:01', '2024-04-29 04:02:01'),
-(3, 'Universitas Negeri Semarang', '2024-04-29 04:02:01', '2024-04-29 04:02:01');
+(1, 'Universitas Indonesia', '2024-05-05 07:01:16', '2024-05-05 07:01:16'),
+(2, 'Institute Technology Bandung', '2024-05-05 07:01:16', '2024-05-05 07:01:16'),
+(3, 'Universitas Negeri Semarang', '2024-05-05 07:01:16', '2024-05-05 07:01:16');
 
 -- --------------------------------------------------------
 
@@ -83,9 +83,9 @@ CREATE TABLE `division` (
 --
 
 INSERT INTO `division` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'Technology', '2024-04-29 04:02:08', '2024-04-29 04:02:08'),
-(2, 'Media', '2024-04-29 04:02:08', '2024-04-29 04:02:08'),
-(3, 'Production', '2024-04-29 04:02:08', '2024-04-29 04:02:08');
+(1, 'Technology', '2024-05-05 07:01:13', '2024-05-05 07:01:13'),
+(2, 'Media', '2024-05-05 07:01:13', '2024-05-05 07:01:13'),
+(3, 'Production', '2024-05-05 07:01:13', '2024-05-05 07:01:13');
 
 -- --------------------------------------------------------
 
@@ -112,7 +112,7 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`id`, `user_id`, `name`, `age`, `campus_id`, `division_id`, `start_date`, `end_date`, `photo`, `created_at`, `updated_at`) VALUES
-(1, 2, 'Alfarizy', '22', 1, 1, '2024-04-01', '2024-05-31', NULL, '2024-04-29 04:04:23', '2024-04-29 04:09:34');
+(1, 2, 'Alfarizy', '22', 1, 1, '2024-05-05', '2024-05-31', NULL, '2024-05-05 07:02:18', '2024-05-05 07:02:18');
 
 -- --------------------------------------------------------
 
@@ -181,20 +181,20 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(29, '2014_10_12_000000_create_users_table', 1),
-(30, '2014_10_12_100000_create_password_resets_table', 1),
-(31, '2019_08_19_000000_create_failed_jobs_table', 1),
-(32, '2019_12_14_000001_create_personal_access_tokens_table', 1),
-(33, '2020_08_25_125219_create_roles_table', 1),
-(34, '2020_08_25_125921_create_role_user_table', 1),
-(35, '2020_08_25_202640_create_employees_table', 1),
-(36, '2020_08_26_074104_create_attendances_table', 1),
-(37, '2020_08_27_204751_create_leaves_table', 1),
-(38, '2024_04_08_175104_create_statusatten_table', 1),
-(39, '2024_04_13_183604_create_division_table', 1),
-(40, '2024_04_16_094117_create_campus_table', 1),
-(41, '2024_04_22_193214_create_weeklyreports_table', 1),
-(42, '2024_04_26_171431_create_holidays_table', 1);
+(57, '2014_10_12_000000_create_users_table', 1),
+(58, '2014_10_12_100000_create_password_resets_table', 1),
+(59, '2019_08_19_000000_create_failed_jobs_table', 1),
+(60, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+(61, '2020_08_25_125219_create_roles_table', 1),
+(62, '2020_08_25_125921_create_role_user_table', 1),
+(63, '2020_08_25_202640_create_employees_table', 1),
+(64, '2020_08_26_074104_create_attendances_table', 1),
+(65, '2020_08_27_204751_create_leaves_table', 1),
+(66, '2024_04_08_175104_create_statusatten_table', 1),
+(67, '2024_04_13_183604_create_division_table', 1),
+(68, '2024_04_16_094117_create_campus_table', 1),
+(69, '2024_04_22_193214_create_weeklyreports_table', 1),
+(70, '2024_04_26_171431_create_holidays_table', 1);
 
 -- --------------------------------------------------------
 
@@ -244,8 +244,8 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'admin', '2024-04-29 04:01:31', '2024-04-29 04:01:31'),
-(2, 'employee', '2024-04-29 04:01:31', '2024-04-29 04:01:31');
+(1, 'admin', '2024-05-05 07:01:34', '2024-05-05 07:01:34'),
+(2, 'employee', '2024-05-05 07:01:34', '2024-05-05 07:01:34');
 
 -- --------------------------------------------------------
 
@@ -266,7 +266,7 @@ CREATE TABLE `role_user` (
 --
 
 INSERT INTO `role_user` (`id`, `role_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, '2024-04-29 04:01:43', '2024-04-29 04:01:43'),
+(1, 1, 1, '2024-05-05 07:01:09', '2024-05-05 07:01:09'),
 (2, 2, 2, NULL, NULL);
 
 -- --------------------------------------------------------
@@ -282,6 +282,13 @@ CREATE TABLE `statusatten` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `statusatten`
+--
+
+INSERT INTO `statusatten` (`id`, `ip`, `location`, `created_at`, `updated_at`) VALUES
+(1, '127.0.0.1', 'Serpong Utara, Tangerang Selatan, Indonesia', '2024-05-05 07:03:43', '2024-05-05 07:06:43');
 
 -- --------------------------------------------------------
 
@@ -305,8 +312,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'admin@gmail.com', NULL, '$2y$10$sGFqwFGFkWtz9fmyIPyaNewZbV3whB/bWDSRPRjiTM5dmocckPXBG', NULL, '2024-04-29 04:01:36', '2024-04-29 04:01:36'),
-(2, 'Alfarizy', 'alfarizy@gmail.com', NULL, '$2y$10$TRnZfKSW3Ry0f1oASjShyuVOb0N1CRrNUAr5lC/8xDJs/CEgYc5MK', NULL, '2024-04-29 04:04:23', '2024-04-29 04:04:23');
+(1, 'Admin', 'admin@gmail.com', NULL, '$2y$10$DHNoSiIGDhDRsHDEbOdCk.AtD6E/mQqCYYqgk7QDw4nIaFroB36gy', NULL, '2024-05-05 07:01:24', '2024-05-05 07:01:24'),
+(2, 'Alfarizy', 'alfarizy@gmail.com', NULL, '$2y$10$xxdVgfNiXzq1/9R4KdyPR.oA3WIs82nczcJmKYB/QhMVmq8ILbQFS', NULL, '2024-05-05 07:02:18', '2024-05-05 07:02:18');
 
 -- --------------------------------------------------------
 
@@ -429,7 +436,7 @@ ALTER TABLE `weeklyreports`
 -- AUTO_INCREMENT for table `attendances`
 --
 ALTER TABLE `attendances`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `campus`
@@ -471,7 +478,7 @@ ALTER TABLE `leaves`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -495,7 +502,7 @@ ALTER TABLE `role_user`
 -- AUTO_INCREMENT for table `statusatten`
 --
 ALTER TABLE `statusatten`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
