@@ -23,7 +23,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Dashboard Admin
+                            Dashboard
                         </p>
                     </a>
                 </li>
@@ -34,7 +34,7 @@
                     <a href="{{ route('employee.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Dashboard Karyawan
+                            Dashboard
                         </p>
                     </a>
                 </li>

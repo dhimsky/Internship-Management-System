@@ -96,6 +96,11 @@
                                     <label for="">Seleksi Data </label>
                                     <input type="text" name="date" id="date" class="form-control">
                                 </div>
+                                <div class="text-danger">
+                                    <small>*Izin Sakit hanya bisa diajukan maksimal H+3 sejak tanggal ketidakhadiran.</small>
+                                    <br>
+                                    <small>*Izin Cuti harus diajukan minimal 1 hari sebelum tanggal cuti dan tanggal cuti harus lebih dari hari ini.</small>
+                                </div>
                             </div>
                             <div class="card-footer">
                                 <button class="btn btn-primary" type="submit">Ajukan</button>

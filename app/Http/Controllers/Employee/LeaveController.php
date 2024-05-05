@@ -69,21 +69,29 @@ class LeaveController extends Controller
         
         if ($reason === "Cuti") {
             $currentDate = Carbon::now();
+            $chosenDate = null;
 
             if ($request->has('date')) {
                 $chosenDate = Carbon::parse($request->input('date'));
+            }else {
+                Alert::error('Error', 'Tanggal tidak valid.');
+                return back();
             }
-            elseif ($request->has('date_range')) {
+            
+            if ($request->has('date_range')) {
                 [$start, $end] = explode(' - ', $request->input('date_range'));
                 $chosenDate = Carbon::parse($start);
-            }
-            // Periksa apakah chosenDate sama atau sebelum tanggal sekarang
-            if ($chosenDate && ($chosenDate->isSameDay($currentDate) || $chosenDate->isBefore($currentDate))) {
-                // Tampilkan pesan info jika chosenDate adalah tanggal sekarang atau sebelumnya
-                Alert::info('Info', 'Izin Cuti harus diajukan minimal 1 hari sebelum tanggal cuti dan tanggal cuti harus lebih dari hari ini.');
+            }else {
+                Alert::error('Error', 'Tanggal tidak valid.');
                 return back();
             }
         }
+        // // Periksa apakah chosenDate sudah ditentukan dan bukan null
+        // if ($chosenDate && ($chosenDate->isSameDay($currentDate) || $chosenDate->isBefore($currentDate))) {
+        //     // Tampilkan pesan info jika chosenDate adalah tanggal sekarang atau sebelumnya
+        //     Alert::info('Info', 'Izin Cuti harus diajukan minimal 1 hari sebelum tanggal cuti dan tanggal cuti harus lebih dari hari ini.');
+        //     return back();
+        // }
 
         $data = [
             'employee' => Auth::user()->employee
