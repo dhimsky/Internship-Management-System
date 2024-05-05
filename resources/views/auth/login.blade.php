@@ -58,5 +58,32 @@
                 </div>
             </div>
         </section>
+               @include('sweetalert::alert')
+        @if ($errors->any())
+            <script>
+                var errorMessages = [];
+                @foreach ($errors->all() as $error)
+                    errorMessages.push("{{ $error }}");
+                @endforeach
+            </script>
+        @endif
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
+        <script>
+            // Pastikan array errorMessages telah didefinisikan sebelumnya
+            if (errorMessages.length > 0) {
+                var errorMessage = "<ul>";
+                errorMessages.forEach(function(message) {
+                    errorMessage +="<li>Email/Password yang Anda masukkan salah!</li>" + "<br>";
+                });
+                errorMessage += "</ul>";
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Errors',
+                    html: errorMessage,
+                });
+            }
+        </script> 
     </body>
 </html>
