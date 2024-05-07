@@ -30,41 +30,29 @@ class AttendanceController extends Controller
     }
 
     public function location(Request $request)
-{
-    $response = Http::get('https://nominatim.openstreetmap.org/reverse', [
-        'format' => 'geojson',
-        'lat' => $request->lat,
-        'lon' => $request->lon,
-    ]);
+    {
+        $response = Http::get('https://nominatim.openstreetmap.org/reverse?format=geojson&lat='.$request->lat.'&lon='.$request->lon);
 
-    $properties = $response->json()['features'][0]['properties'];
+        return $response->json()['features'][0]['properties']['display_name'];
+    }
 
-    // Ambil informasi yang ingin Anda tampilkan (misalnya nama desa, kecamatan, kabupaten/negara)
-    $address = [
-        'village' => $properties['address']['village'] ?? '',
-        'town' => $properties['address']['town'] ?? '',
-        'county' => $properties['address']['county'] ?? '',
-        'country' => $properties['address']['country'] ?? '',
-    ];
+    // public function location(Request $request)
+    // {
+    //     $response = Http::get('https://nominatim.openstreetmap.org/reverse', [
+    //         'format' => 'geojson',
+    //         'lat' => $request->lat,
+    //         'lon' => $request->lon,
+    //     ]);
 
-    return implode(', ', array_filter($address)); // Gabungkan dan kembalikan informasi yang terkumpul
-}
+    //     $properties = $response->json()['features'][0]['properties'];
 
+    //     $address = [
+    //         'city' => $properties['address']['city'] ?? '',
+    //         'state' => $properties['address']['state'] ?? '',
+    //         'country' => $properties['address']['country'] ?? '',
+    //     ];
 
-    // public function location(Request $request) {
-        
-    //     $response = Http::get('https://nominatim.openstreetmap.org/reverse?format=geojson&lat='.$request->lat.'&lon='.$request->lon);
-    //     // dd();
-    //     // $result = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' . $request->lat . ',' . $request->lon . '&key=AIzaSyC_spXZlR87VF9qq073nAhFGZ-f3K6enqk';
-    //     // $file_contents = file_get_contents($result);
-
-    //     // $json_decode = json_decode($file_contents);
-    //     // echo  $json_decode->results[0]->formatted_address;
-    //     // $response = array(
-    //     //     'status' => 'success',
-    //     //     'result' => $json_decode
-    //     // );
-    //     return $response->json()['features'][0]['properties']['display_name'];
+    //     return implode(', ', array_filter($address)); 
     // }
 
     // Opens view for attendance register form

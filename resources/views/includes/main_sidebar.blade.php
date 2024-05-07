@@ -8,8 +8,8 @@
             href="{{ route('employee.index') }}"
         @endcan
         class="brand-link text-left">
-        <img src="{{ asset('/') }}images/logo.png" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: 0.8;" />
-        <span class="brand-text font-weight-light ">IMS</span>
+        <img src="{{ asset('/') }}images/divhub.png" alt="Logo" class="brand-image " style="opacity: 0.8;" />
+        <span class="brand-text font-weight-bold ">IMS</span>
     </a>
     <div class="sidebar">
         <nav class="mt-2">

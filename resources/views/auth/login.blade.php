@@ -16,13 +16,13 @@
                         <form class="md-float-material form-material" method="POST" action="{{ route('login') }}">
                             @csrf
                             <div class="text-center">
-                                <img src="{{ asset('/') }}images/logo.png" style="width: 3cm; height: 3.2cm;" alt="logo.png">
+                                <img src="{{ asset('/') }}images/divhub.png" style="width: 3cm; height: 3.5cm;" alt="logo.png">
                             </div>
                             <div class="auth-box card">
                                 <div class="card-block">
                                     <div class="row m-b-20">
                                         <div class="col-md-12">
-                                            <h3 class="text-center">IMS</h3>
+                                            <h3 class="text-center font-weight-bold">INTERNSHIP MANAGEMENT SISTEM</h3>
                                         </div>
                                     </div>
                                     <div class="form-group form-primary">
