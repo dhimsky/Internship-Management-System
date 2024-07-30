@@ -157,8 +157,8 @@
                         @enderror
                     </div>
                     <div class="form-group mb-3">
-                        <label class="required-label faded-label" for="file" >Upload File (PDF)</label>
-                        <input type="file" name="file" id="file" class="custom-file @error('file') is-invalid @enderror" accept="application/pdf" placeholder="Upload File">
+                        <label class="required-label faded-label" for="file" >Upload File (PDF or PPTX)</label>
+                        <input type="file" name="file" id="file" class="custom-file @error('file') is-invalid @enderror" accept="application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation" placeholder="Upload File">
                         @error('file')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>

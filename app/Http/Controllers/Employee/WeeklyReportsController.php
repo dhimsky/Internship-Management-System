@@ -21,12 +21,12 @@ class WeeklyReportsController extends Controller
     {
         $request->validate([
             'tittle' => 'required',
-            'file' => 'required|file|mimes:pdf|max:2048',
+            'file' => 'required|file|mimes:pdf,pptx|max:2048',
             'value' => 'nullable',
         ],[
             'tittle.required' => 'Judul wajib diisi!',
             'file.required' => 'Wajib upload file!',
-            'file.mimes' => 'Wjib format PDF!',
+            'file.mimes' => 'Format file harus PDF atau PPTX!',
             'file.max' => 'File maksimal 2MB!',
         ]);
     
@@ -42,7 +42,7 @@ class WeeklyReportsController extends Controller
             $file = $request->file('file');
             $currentDate = Carbon::now()->format('Y-m-d');
             $originalFileName = $file->getClientOriginalName();
-            $fileName = "{$currentDate}_{$originalFileName}.pdf";
+            $fileName = "{$currentDate}_{$originalFileName}";
             Storage::putFileAs('public/pdf_reports', $file, $fileName);
             $reportData['file'] = $fileName;
         }

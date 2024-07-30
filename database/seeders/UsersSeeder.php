@@ -20,7 +20,12 @@ class UsersSeeder extends Seeder
                 'id' => 1,
                 'name' => 'Admin',
                 'email' => 'admin@gmail.com',
-                'password' => bcrypt(123)
+                'password' => bcrypt('abcd1234')
+            ], [
+                'id' => 2,
+                'name' => 'Alfarizy',
+                'email' => 'alfarizy@gmail.com',
+                'password' => bcrypt('abcd1234')
             ]
         ];
         foreach($user as $key => $value){

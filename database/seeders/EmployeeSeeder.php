@@ -18,11 +18,12 @@ class EmployeeSeeder extends Seeder
         $employee = [
             [
                 'user_id' => 2,
-                'name' => 'Dhimas Afrisetiawan',
+                'name' => 'Alfarizy',
                 'age' => 20,
-                'campus_origin' => 'PNC',
-                'division' => 'Eng',
-                'intern_period' => '2021-12-09'
+                'campus_id' => 1,
+                'division_id' => 1,
+                'start_date' => '2024-06-09',
+                'end_date' => '2024-07-09',
             ],
         ];
         foreach($employee as $key => $value){
