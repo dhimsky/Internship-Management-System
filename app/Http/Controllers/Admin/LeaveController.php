@@ -26,52 +26,6 @@ class LeaveController extends Controller
     }
 
     public function update(Request $request, $leave_id){
-        // $this->validate($request, [
-        //     'status' => 'required'
-        // ]);
-        // $leave = Leave::find($leave_id);
-        // $leave->status = $request->status;
-        // $leave->save();
-
-        // Alert::success('Success', 'Status Cuti Berhasil Diubah');
-        // return back();
-
-        // $this->validate($request, [
-        //     'status' => 'required|in:approved,declined,pending' // Hanya terima atau declined yang valid
-        // ]);
-    
-        // $leave = Leave::find($leave_id);
-    
-        // if (!$leave) {
-        //     Alert::error('Error', 'Cuti tidak ditemukan.');
-        //     return back();
-        // }
-    
-        // $oldStatus = $leave->status;
-        // $newStatus = $request->status;
-    
-        // // Update status di tabel Leave
-        // $leave->status = $newStatus;
-        // $leave->save();
-    
-        // if ($newStatus === 'approved' && $oldStatus !== 'approved') {
-        //     // Jika status baru adalah 'approved' dan sebelumnya bukan 'approved'
-    
-        //     // Ambil data yang diperlukan dari Leave
-        //     $employee_id = $leave->employee_id;
-        //     $registered = $leave->reason;
-        //     $created_at = $leave->start_date;
-    
-        //     // Buat entri baru di tabel Attendance
-        //     $attendance = new Attendance();
-        //     $attendance->employee_id = $employee_id;
-        //     $attendance->registered = $registered;
-        //     $attendance->created_at = $created_at;
-        //     $attendance->save();
-        // }
-    
-        // Alert::success('Success', 'Status Cuti Berhasil Diubah');
-        // return back();
 
         $this->validate($request, [
             'status' => 'required|in:approved,declined,pending' // Hanya terima atau tolak yang valid

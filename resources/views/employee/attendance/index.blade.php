@@ -106,9 +106,9 @@
                                 <thead>
                                     <tr class="text-center">
                                         <th>#</th>
-                                        <th>Tanggal Absen</th>
-                                        <th>Status Absen</th>
-                                        <th>Keterangan Absen</th>
+                                        <th>Tanggal Absensi</th>
+                                        <th>Status Absensi</th>
+                                        <th>Waktu Absensi</th>
                                         <th class="none">Laporan Harian</th>
                                         <th class="none">Riwayat Awal Absensi</th>
                                         <th class="none">Riwayat Akhir Absensi</th>
@@ -119,15 +119,36 @@
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         @if ($attendance)
-                                            @if ($attendance->registered == 'hadir')
+                                            @if ($attendance->registered == 'Hadir')
                                             <td>{{ $attendance->created_at->format('d M Y') }}</td>
-                                            <td><h5 class="text-center"><span class="badge badge-pill badge-success">Hadir</span> </h5></td>
+                                            <td><h6 class="text-center"><span class="badge badge-pill badge-success">Hadir</span> </h6></td>
                                             <?php if($attendance->time>=7 && $attendance->time<=9) { ?>
                                                 <td><h6 class="text-center"><span class="badge badge-pill badge-success">Hadir Tepat Waktu</span></h6></td>
                                             <?php } elseif ($attendance->time>9 && $attendance->time<=15) {
                                                 ?><td><h6 class="text-center"><span class="badge badge-pill badge-warning">Hadir Terlambat</span></h6></td><?php
                                             } else {
-                                                ?><td><h6 class="text-center"><span class="badge badge-pill badge-danger">Absensi Tidak Valid</span></h6></td><?php 
+                                                ?><td><h6 class="text-center"><span class="badge badge-pill badge-danger">Absensi Di Luar Jam Kerja</span></h6></td><?php 
+                                            } ?>
+                                            <td>{{ $attendance->daily_report }}</td>
+                                            <td>
+                                                Terekam sejak {{ $attendance->created_at->format('H:i:s') }} dari {{ $attendance->entry_location}} dengan alamat IP {{ $attendance->entry_ip}} <span class="badge {{ $attendance->entry_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
+                                                    {{ $attendance->entry_status }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                Terekam sejak {{ $attendance->updated_at->format('H:i:s') }} dari {{ $attendance->exit_location}} dengan alamat IP {{ $attendance->exit_ip}} <span class="badge {{ $attendance->exit_status === 'Valid' ? 'badge-success' : 'badge-danger' }}">IP/ Lokasi Kantor 
+                                                    {{ $attendance->exit_status }}
+                                                </span>
+                                            </td>
+                                            @elseif ($attendance->registered == 'Membutuhkan Validasi')
+                                            <td>{{ $attendance->created_at->format('d M Y') }}</td>
+                                            <td><h6 class="text-center"><span class="badge badge-pill badge-info">Membutuhkan Validasi</span> </h6></td>
+                                            <?php if($attendance->time>=7 && $attendance->time<=9) { ?>
+                                                <td><h6 class="text-center"><span class="badge badge-pill badge-success">Hadir Tepat Waktu</span></h6></td>
+                                            <?php } elseif ($attendance->time>9 && $attendance->time<=15) {
+                                                ?><td><h6 class="text-center"><span class="badge badge-pill badge-warning">Hadir Terlambat</span></h6></td><?php
+                                            } else {
+                                                ?><td><h6 class="text-center"><span class="badge badge-pill badge-danger">Absensi Di Luar Jam Kerja</span></h6></td><?php 
                                             } ?>
                                             <td>{{ $attendance->daily_report }}</td>
                                             <td>
@@ -142,13 +163,13 @@
                                             </td>
                                             @elseif ($attendance->registered === null)
                                             <td>{{ $attendance->created_at->format('d M Y') }}</td>
-                                            <td><h5 class="text-center"><span class="badge badge-pill badge-warning">Setengah Jam Kerja</span> </h5></td>
+                                            <td><h6 class="text-center"><span class="badge badge-pill badge-warning">Setengah Jam Kerja</span> </h6></td>
                                             <?php if($attendance->time>=7 && $attendance->time<=9) { ?>
                                                 <td><h6 class="text-center"><span class="badge badge-pill badge-success">Hadir Tepat Waktu</span></h6></td>
                                             <?php } elseif ($attendance->time>9 && $attendance->time<=15) {
                                                 ?><td><h6 class="text-center"><span class="badge badge-pill badge-warning">Hadir Terlambat</span></h6></td><?php
                                             } else {
-                                                ?><td><h6 class="text-center"><span class="badge badge-pill badge-danger">Absensi Tidak Valid</span></h6></td><?php 
+                                                ?><td><h6 class="text-center"><span class="badge badge-pill badge-danger">Absensi Di Luar Jam Kerja</span></h6></td><?php 
                                             } ?>
                                             <td>Belum Ada Riwayat</td>
                                             <td>
@@ -161,14 +182,14 @@
                                             </td>
                                             @elseif ($attendance->registered == 'Sakit')
                                             <td>{{ $attendance->created_at->format('d M Y') }}</td>
-                                            <td><h5 class="text-center"><span class="badge badge-pill badge-info">Izin/Sakit</span> </h5></td>
+                                            <td><h6 class="text-center"><span class="badge badge-pill badge-info">Izin/Sakit</span> </h6></td>
                                             <td><h6 class="text-center"><span class="badge badge-pill badge-info">Belum Ada Riwayat</span></h6></td>
                                             <td class="text-center">Belum Ada Riwayat</td>
                                             <td class="text-center">Belum Ada Riwayat</td>
                                             <td class="text-center">Belum Ada Riwayat</td>
                                             @elseif ($attendance->registered == 'Cuti')
                                             <td>{{ $attendance->created_at->format('d M Y') }}</td>
-                                            <td><h5 class="text-center"><span class="badge badge-pill badge-info">Cuti</span> </h5></td>
+                                            <td><h6 class="text-center"><span class="badge badge-pill badge-info">Cuti</span> </h6></td>
                                             <td><h6 class="text-center"><span class="badge badge-pill badge-info">Belum Ada Riwayat</span></h6></td>
                                             <td class="text-center">Belum Ada Riwayat</td>
                                             <td class="text-center">Belum Ada Riwayat</td>

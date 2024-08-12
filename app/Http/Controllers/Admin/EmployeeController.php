@@ -150,26 +150,6 @@ class EmployeeController extends Controller
         $data['employees'] = $employees;
         return view('admin.employees.attendance', $data)->with($data);
     }
-    // public function attendance(Request $request) {
-    //     $data = [
-    //         'date' => null,
-    //         'employees' => null
-    //     ];
-    
-    //     if ($request->filled('date')) {
-    //         $date = Carbon::createFromFormat('Y-m-d', $request->date);
-    //     } else {
-    //         $date = Carbon::now();
-    //     }
-    
-    //     // Mengambil semua data Employee beserta relasi Division
-    //     $employees = Employee::with('division')->get();
-    
-    //     $data['date'] = $date->format('d M, Y');
-    //     $data['employees'] = $employees;
-    
-    //     return view('admin.employees.attendance', $data);
-    // }
 
     public function attendanceByDate($date) {
         $employees = DB::table('employees')
@@ -191,6 +171,7 @@ class EmployeeController extends Controller
         $employees = Attendance::find($id);
         $employees->entry_status = $request->entry_status;
         $employees->exit_status = $request->exit_status;
+        $employees->registered = $request->registered;
         $employees->save();
 
         Alert::success('Success', 'Data berhasil diubah!');

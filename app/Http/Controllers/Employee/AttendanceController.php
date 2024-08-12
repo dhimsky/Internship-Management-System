@@ -111,6 +111,11 @@ class AttendanceController extends Controller
 
     // Hapus data record absensi
     public function update(Request $request, $attendance_id) {
+
+        if ($request->has('daily_report') && trim($request->daily_report) === '') {
+            return redirect()->back()->withErrors(['daily_report' => 'Laporan Harian harus diisi ketika melakukan Absen Keluar.']);
+        }
+
         $attendance = Attendance::findOrFail($attendance_id);
         $exit_ip = $request->ip();
         $exit_location = $request->exit_location;
@@ -128,10 +133,18 @@ class AttendanceController extends Controller
                 break; // Keluar dari loop jika sudah ada kecocokan
             }
         }
+        
+        $registered = 'Membutuhkan Validasi';
+        foreach ($allowedLocations as $location) {
+            if ($exit_ip === $location->ip || $exit_location === $location->location) {
+                $registered = 'Hadir';
+                break; // Keluar dari loop jika sudah ada kecocokan
+            }
+        }
 
         $attendance->exit_ip = $request->ip();
         $attendance->exit_location = $request->exit_location;
-        $attendance->registered = 'hadir';
+        $attendance->registered = $registered;
         $attendance->exit_status = $exit_status;
         $attendance->daily_report = $request->daily_report;
         $attendance->save();
