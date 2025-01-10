@@ -28,8 +28,8 @@ class UsersSeeder extends Seeder
                 'password' => bcrypt('abcd1234')
             ]
         ];
-        foreach($user as $key => $value){
-            User::create($value);
+            foreach($user as $key => $value){
+                User::create($value);
         }
     }
 }
